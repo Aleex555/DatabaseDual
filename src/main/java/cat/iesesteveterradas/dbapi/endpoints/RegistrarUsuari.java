@@ -16,36 +16,36 @@ public class RegistrarUsuari {
     @Produces(MediaType.APPLICATION_JSON)
     public Response afegirUsuari(String jsonInput,@HeaderParam("Authorization") String authorizationHeader) {
         try {
-            String token = authorizationHeader != null && authorizationHeader.startsWith("Bearer ")
-            ? authorizationHeader.substring(7)
-            : null;
             JSONObject input = new JSONObject(jsonInput);
             
-            String telefon = input.optString("telefon", null);
-            String nickname = input.optString("nickname", null);
+            String telefono = input.optString("telefono", null);
+            String nombre = input.optString("nombre", null);
             String email = input.optString("email", null);
+            String contrasena = input.optString("contraseña", null);
 
 
-            // Validación para 'nickname'
-            if (nickname == null || nickname.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Nickname requerido\"}").build();
+            // Validación para 'nombre'
+            if (nombre == null || nombre.trim().isEmpty()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Nombre requerido\"}").build();
             }
 
             // Validación para 'telefon'
-            if (telefon == null) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Telèfon requerit\"}").build();
+            if (telefono == null) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Telefono requerido\"}").build();
             }
 
             // Validación para 'email'
             if (email == null || email.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Email requerit\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Email requerido\"}").build();
             }
 
-            Random random = new Random();
-            int codigo1 = random.nextInt(900000) + 100000;
-            String codigo = String.valueOf(codigo1);
+            if (contrasena == null || contrasena.trim().isEmpty()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Contraseña requerida \"}").build();
+            }
 
-            UsuarisDao.creaUsuario(nickname,telefon, email,codigo);
+
+
+            UsuarisDao.creaUsuario(nombre,email, telefono,contrasena);
             
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");
@@ -53,9 +53,8 @@ public class RegistrarUsuari {
 
             // Crear el objeto JSON para la parte "data"
             JSONObject userData = new JSONObject();
-            userData.put("nickname", nickname);
+            userData.put("nombre", nombre);
             userData.put("email", email);
-            userData.put("codi_validacio", codigo);
 
             // Añadir el objeto "data" al JSON de respuesta
             jsonResponse.put("data", userData);

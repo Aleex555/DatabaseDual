@@ -1,8 +1,4 @@
 package cat.iesesteveterradas.dbapi;
-
-import cat.iesesteveterradas.dbapi.persistencia.Configuracio;
-import cat.iesesteveterradas.dbapi.persistencia.ConfiguracioDAO;
-import cat.iesesteveterradas.dbapi.persistencia.Propietat;
 import cat.iesesteveterradas.dbapi.persistencia.SessionFactoryManager;
 
 import org.apache.commons.cli.CommandLine;
@@ -25,11 +21,7 @@ public class AppMain {
     // URI base on el servidor HTTP de Grizzly escoltarà
     private static String baseURI;
 
-    public static void iniciarHibernate(){
-        Configuracio configuracio = ConfiguracioDAO.trobaOCreaConfiguracioPerNom("Configuració 1");
-        Propietat propietat = new Propietat("versió", "1.0.1");
-        ConfiguracioDAO.afegeixPropietatAConfiguracio(propietat, configuracio);
-    }
+    
 
     public static HttpServer iniciarServidorAPI(String host, int port) {
         // Construeix la URI de base utilitzant els paràmetres host i port
@@ -70,7 +62,6 @@ public class AppMain {
             int port = cmd.hasOption("port") ? Integer.parseInt(cmd.getOptionValue("port")) : 8080;
 
             logger.info("Iniciant hibernate...");
-            iniciarHibernate();
 
             logger.info("Iniciant el servidor...");
             final HttpServer server = iniciarServidorAPI(host, port);

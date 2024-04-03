@@ -1,8 +1,19 @@
 package cat.iesesteveterradas.dbapi.persistencia;
 
-import javax.persistence.*;
+
 import java.util.HashSet;
 import java.util.Set;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "alojamiento")
@@ -12,8 +23,8 @@ public class Alojamiento {
     private Long alojamientoID;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "empresaID")
-    private Empresa empresa;
+    @JoinColumn(name = "propietarioID")
+    private Propietario propietario;
     
     private String nombre;
     private String descripción;
@@ -28,10 +39,7 @@ public class Alojamiento {
     public Alojamiento() {
     }
 
-    // Getters y Setters
     public Long getAlojamientoID() {
         return alojamientoID;
     }
-
-    // Continúa con los demás getters y setters...
 }

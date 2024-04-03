@@ -1,8 +1,17 @@
 package cat.iesesteveterradas.dbapi.persistencia;
 
-import javax.persistence.*;
+
 import java.util.HashSet;
 import java.util.Set;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
 
 @Entity
 @Table(name = "usuario")
@@ -13,8 +22,8 @@ public class Usuario {
     
     private String nombre;
     private String email;
-    private String contraseña;
-    private String teléfono;
+    private String contrasena;
+    private String telefono;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Reserva> reservas = new HashSet<>();
@@ -22,7 +31,13 @@ public class Usuario {
     public Usuario() {
     }
 
-    // Getters y Setters
+    public Usuario(String nombre, String email,String telefono, String contrasena) {
+        this.nombre = nombre;
+        this.email = email;
+        this.telefono = telefono;
+        this.contrasena = contrasena;
+    }
+
     public Long getUserID() {
         return userID;
     }
@@ -47,20 +62,20 @@ public class Usuario {
         this.email = email;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getContrasena() {
+        return contrasena;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setContraseña(String contrasena) {
+        this.contrasena = contrasena;
     }
 
-    public String getTeléfono() {
-        return teléfono;
+    public String getTelefono() {
+        return telefono;
     }
 
-    public void setTeléfono(String teléfono) {
-        this.teléfono = teléfono;
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 
     public Set<Reserva> getReservas() {
