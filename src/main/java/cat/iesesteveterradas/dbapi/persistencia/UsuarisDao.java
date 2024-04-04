@@ -1,14 +1,8 @@
 package cat.iesesteveterradas.dbapi.persistencia;
 
-import java.util.Date;
-import java.util.List;
-
 import org.apache.commons.codec.digest.DigestUtils;
-
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,10 +14,12 @@ public class UsuarisDao {
         Session session = SessionFactoryManager.getSessionFactory().openSession();
         Transaction tx = null;
         Usuario usuario = null;
+        String hashedPassword = DigestUtils.sha256Hex(contrasena);
+        logger.info(hashedPassword);
 
         try {
             tx = session.beginTransaction();
-            usuario = new Usuario(nombre, email, telefono,contrasena);
+            usuario = new Usuario(nombre, email, telefono,hashedPassword);
             session.save(usuario);
             tx.commit();
             logger.info("Nuevo usuario creado con el nickname: {}", nombre);
