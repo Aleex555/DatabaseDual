@@ -3,25 +3,31 @@ package cat.iesesteveterradas.dbapi.endpoints;
 import java.util.Random;
 
 import org.json.JSONObject;
+import org.slf4j.LoggerFactory;
 
+import cat.iesesteveterradas.dbapi.persistencia.PropietarioDao;
 import cat.iesesteveterradas.dbapi.persistencia.UsuarisDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 @Path("/usuari/registrar")
 public class RegistrarUsuari {
+    private static final Logger logger = LoggerFactory.getLogger(RegistrarUsuari.class);
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response afegirUsuari(String jsonInput,@HeaderParam("Authorization") String authorizationHeader) {
+    public Response afegirUsuari(String jsonInput) {
         try {
             JSONObject input = new JSONObject(jsonInput);
-            
             String telefono = input.optString("telefono", null);
             String nombre = input.optString("nombre", null);
             String email = input.optString("email", null);
             String contrasena = input.optString("contraseña", null);
+            String tipo = input.optString("tipo", null);
+            
 
 
             // Validación para 'nombre'
@@ -42,14 +48,23 @@ public class RegistrarUsuari {
             if (contrasena == null || contrasena.trim().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Contraseña requerida \"}").build();
             }
+            if (tipo == null || tipo.trim().isEmpty()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Contraseña requerida \"}").build();
+            }
 
+            
+            //System.out.println(tipo);
 
-
-            UsuarisDao.creaUsuario(nombre,email, telefono,contrasena);
+            if(tipo.equals("propietario") ){
+                PropietarioDao.creaPropietario(nombre, email, telefono, contrasena);
+            }else{
+                UsuarisDao.creaUsuario(nombre,email, telefono,contrasena);
+            }
+            
             
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");
-            jsonResponse.put("message", "L'usuari s'ha creat correctament");
+            jsonResponse.put("message", "Usuario creado correctamente");
 
             // Crear el objeto JSON para la parte "data"
             JSONObject userData = new JSONObject();
@@ -63,7 +78,8 @@ public class RegistrarUsuari {
             String prettyJsonResponse = jsonResponse.toString(4); // 4 espais per indentar
             return Response.ok(prettyJsonResponse).build();
         } catch (Exception e) {
-            return Response.serverError().entity("{\"status\":\"ERROR\",\"message\":\"Error en afegir el usuari\"}").build();
+            e.printStackTrace();
+            return Response.serverError().entity("{\"status\":\"ERROR\",\"message\":\"Error en afegir el usuari\"}"+e).build();
         }
     }
 }

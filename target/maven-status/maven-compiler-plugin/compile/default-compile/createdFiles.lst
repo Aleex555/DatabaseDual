@@ -6,6 +6,7 @@ cat/iesesteveterradas/dbapi/AppMain.class
 cat/iesesteveterradas/dbapi/DBApi.class
 cat/iesesteveterradas/dbapi/endpoints/HolaResource.class
 cat/iesesteveterradas/dbapi/endpoints/ExemplesResource.class
+cat/iesesteveterradas/dbapi/persistencia/PropietarioDao.class
 cat/iesesteveterradas/dbapi/endpoints/RegistrarUsuari.class
 cat/iesesteveterradas/dbapi/persistencia/Propietario.class
 cat/iesesteveterradas/dbapi/persistencia/Alojamiento.class

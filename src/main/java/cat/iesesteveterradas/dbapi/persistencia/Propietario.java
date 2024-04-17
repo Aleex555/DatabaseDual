@@ -11,6 +11,8 @@ import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.sql.ast.spi.StringBuilderSqlAppender;
+
 @Entity
 @Table(name = "propietario")
 public class Propietario {
@@ -20,13 +22,21 @@ public class Propietario {
     
     private String nombre;
     private String emailContacto;
-    private String teléfonoContacto;
-    private String dirección;
+    private String telefonoContacto;
+    private String contrasena;
 
     @OneToMany(mappedBy = "propietario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Alojamiento> alojamientos = new HashSet<>();
 
+    public Propietario(String nombre, String email,String telefono, String contrasena) {
+        this.nombre = nombre;
+        this.emailContacto = email;
+        this.telefonoContacto = telefono;
+        this.contrasena = contrasena;
+    }
+
     public Propietario() {
+        
     }
 
     // Getters y Setters

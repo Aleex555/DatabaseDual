@@ -1,25 +1,24 @@
 package cat.iesesteveterradas.dbapi.persistencia;
-
 import org.apache.commons.codec.digest.DigestUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class UsuarisDao {
+public class PropietarioDao {
+    private static final Logger logger = LoggerFactory.getLogger(PropietarioDao.class);
 
-    private static final Logger logger = LoggerFactory.getLogger(UsuarisDao.class);
-
-    public static Usuario creaUsuario(String nombre, String email, String telefono, String contrasena) {
+    @SuppressWarnings("deprecation")
+    public static Propietario creaPropietario(String nombre, String email, String telefono, String contrasena) {
         Session session = SessionFactoryManager.getSessionFactory().openSession();
         Transaction tx = null;
-        Usuario usuario = null;
+        Propietario propietario = null;
         String hashedPassword = DigestUtils.sha256Hex(contrasena);
 
         try {
             tx = session.beginTransaction();
-            usuario = new Usuario(nombre, email, telefono,hashedPassword);
-            session.save(usuario);
+            propietario = new Propietario(nombre, email, telefono,hashedPassword);
+            session.save(propietario);
             tx.commit();
             logger.info("Nuevo usuario creado con el nickname: {}", nombre);
         } catch (Exception e) {
@@ -30,27 +29,26 @@ public class UsuarisDao {
         } finally {
             session.close();
         }
-        return usuario;
+        return propietario;
     }
 
 
-    public static Usuario encontrarUsuarioPorEmailYContrasena(String email, String contrasena) {
-        Usuario usuario = null;
+    public static Propietario encontrarPropietarioPorEmailYContrasena(String email, String contrasena) {
+        Propietario propietario = null;
         String hashedPassword = DigestUtils.sha256Hex(contrasena);
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
-            usuario = session.createQuery("FROM Usuario WHERE email = :email AND contrasena = :contrasena", Usuario.class)
+            propietario = session.createQuery("FROM Propietario WHERE emailContacto = :email AND contrasena = :contrasena", Propietario.class)
                     .setParameter("email", email)
                     .setParameter("contrasena", hashedPassword)
                     .uniqueResult();
-            if (usuario != null) {
-                logger.info("Usuario encontrado con el email: {}", email);
+            if (propietario != null) {
+                logger.info("Propietario encontrado con el email: {}", email);
             } else {
-                logger.info("No se encontró ningún usuario con el email: {} y contraseña proporcionada.", email);
+                logger.info("No se encontró ningún propietario con el email: {} y contraseña proporcionada.", email);
             }
         } catch (Exception e) {
-            logger.error("Error al buscar el usuario con email: {} y contraseña proporcionada.", email, e);
+            logger.error("Error al buscar el propietario con email: {} y contraseña proporcionada.", email, e);
         }
-        return usuario;
+        return propietario;
     }
-    
 }

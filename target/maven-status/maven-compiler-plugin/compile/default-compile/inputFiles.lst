@@ -8,6 +8,7 @@
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/endpoints/UsuarisLogin.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Alojamiento.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Propietario.java
+/home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/persistencia/PropietarioDao.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Reserva.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/persistencia/SessionFactoryManager.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Usuario.java

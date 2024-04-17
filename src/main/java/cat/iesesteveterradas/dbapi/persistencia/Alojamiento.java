@@ -22,16 +22,17 @@ public class Alojamiento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long alojamientoID;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "propietarioID")
-    private Propietario propietario;
-    
     private String nombre;
     private String descripción;
     private String dirección;
     private int capacidad;
     private String reglas;
     private double precioPorNoche;
+    private String urlFoto;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "propietarioID")
+    private Propietario propietario;
 
     @OneToMany(mappedBy = "alojamiento", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Reserva> reservas = new HashSet<>();
