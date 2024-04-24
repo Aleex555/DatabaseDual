@@ -3,7 +3,7 @@
 ### Preparació de la base de dades ###
 Podeu arrancar una instància de MySQL amb Docker
 ```bash
-docker run --name mysql-dbapi -it -e MYSQL_ROOT_PASSWORD=pass -e MYSQL_DATABASE=dbapi -e MYSQL_USER=usuari -e MYSQL_PASSWORD=password -p 3306:3306 mysql
+docker run --name mysql-hostelhunter -it -e MYSQL_ROOT_PASSWORD=pass -e MYSQL_DATABASE=hostelhunter -e MYSQL_USER=alex -e MYSQL_PASSWORD=tu_contraseña -p 3307:3306 mysql
 ```
 
 I aturar-la i destuir-la amb
