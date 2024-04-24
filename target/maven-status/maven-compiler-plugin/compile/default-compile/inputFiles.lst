@@ -2,11 +2,14 @@
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/DBApi.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/endpoints/ExemplesResource.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/endpoints/HolaResource.java
+/home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/endpoints/Informacion.java
+/home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/endpoints/InformacionFlutter.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/endpoints/IniciResource.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/endpoints/RegistrarUsuari.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/endpoints/SeguretatResource.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/endpoints/UsuarisLogin.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Alojamiento.java
+/home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/persistencia/AlojaminetoDao.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Propietario.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/persistencia/PropietarioDao.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Reserva.java

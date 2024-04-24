@@ -51,4 +51,22 @@ public class PropietarioDao {
         }
         return propietario;
     }
+
+    public static Propietario encontrarPropietarioPorID(int propietarioID) {
+        Propietario propietario = null;
+        try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
+            propietario = session.createQuery("FROM Propietario WHERE propietarioID = :id", Propietario.class)
+                    .setParameter("id", propietarioID)
+                    .uniqueResult();
+            if (propietario != null) {
+                logger.info("Propietario encontrado con ID: {}", propietarioID);
+            } else {
+                logger.info("No se encontró ningún propietario con el ID: {}", propietarioID);
+            }
+        } catch (Exception e) {
+            logger.error("Error al buscar el propietario con ID: {}", propietarioID, e);
+        }
+        return propietario;
+    }
+    
 }

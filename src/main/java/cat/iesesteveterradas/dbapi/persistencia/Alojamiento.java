@@ -23,16 +23,19 @@ public class Alojamiento {
     private Long alojamientoID;
     
     private String nombre;
-    private String descripción;
-    private String dirección;
+    private String descripcion;
+    private String direccion;
     private int capacidad;
     private String reglas;
     private double precioPorNoche;
     private String urlFoto;
+    private int puntuaje;
+    private int puntos;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "propietarioID")
     private Propietario propietario;
+
 
     @OneToMany(mappedBy = "alojamiento", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Reserva> reservas = new HashSet<>();
@@ -42,5 +45,92 @@ public class Alojamiento {
 
     public Long getAlojamientoID() {
         return alojamientoID;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    // Setter para nombre
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    // Getter para descripcion
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    // Setter para descripcion
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    // Getter para direccion
+    public String getDireccion() {
+        return direccion;
+    }
+
+    // Setter para direccion
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    // Getter para capacidad
+    public int getCapacidad() {
+        return capacidad;
+    }
+
+    // Setter para capacidad
+    public void setCapacidad(int capacidad) {
+        this.capacidad = capacidad;
+    }
+
+    public int getPuntuaje() {
+        return puntuaje;
+    }
+
+    // Setter para capacidad
+    public void setPuntuaje(int puntuaje) {
+        this.puntuaje = puntuaje;
+    }
+
+    // Getter para reglas
+    public String getReglas() {
+        return reglas;
+    }
+
+    // Setter para reglas
+    public void setReglas(String reglas) {
+        this.reglas = reglas;
+    }
+
+    // Getter para precioPorNoche
+    public double getPrecioPorNoche() {
+        return precioPorNoche;
+    }
+
+    // Setter para precioPorNoche
+    public void setPrecioPorNoche(double precioPorNoche) {
+        this.precioPorNoche = precioPorNoche;
+    }
+
+    // Getter para urlFoto
+    public String getUrlFoto() {
+        return urlFoto;
+    }
+
+    // Setter para urlFoto
+    public void setUrlFoto(String urlFoto) {
+        this.urlFoto = urlFoto;
+    }
+
+    public Propietario getPropietario() {
+        return propietario;
+    }
+
+    // Setter for propietario
+    public void setPropietario(Propietario propietario) {
+        this.propietario = propietario;
     }
 }

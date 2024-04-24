@@ -66,11 +66,6 @@ public class UsuarisLogin {
                 }
             }
 
-            
-
-            
-            
-            
             jsonResponse.put("status", "OK");
             jsonResponse.put("message", "Credenciales correctas");
             
