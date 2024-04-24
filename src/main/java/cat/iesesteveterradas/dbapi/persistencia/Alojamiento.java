@@ -30,7 +30,6 @@ public class Alojamiento {
     private double precioPorNoche;
     private String urlFoto;
     private int puntuaje;
-    private int puntos;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "propietarioID")
