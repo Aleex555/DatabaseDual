@@ -62,6 +62,7 @@ public class AppMain {
             int port = cmd.hasOption("port") ? Integer.parseInt(cmd.getOptionValue("port")) : 8889;
 
             logger.info("Iniciant hibernate...");
+            SessionFactoryManager.getSessionFactory();
 
             logger.info("Iniciant el servidor...");
             final HttpServer server = iniciarServidorAPI(host, port);

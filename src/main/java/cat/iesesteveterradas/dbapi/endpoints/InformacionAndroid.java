@@ -7,14 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cat.iesesteveterradas.dbapi.persistencia.Alojamiento;
-import cat.iesesteveterradas.dbapi.persistencia.AlojaminetoDao;
+import cat.iesesteveterradas.dbapi.persistencia.AlojamientoDao;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-@Path("/informacion")
-public class Informacion {
-    private static final Logger logger = LoggerFactory.getLogger(Informacion.class);
+@Path("/informacion/android")
+public class InformacionAndroid {
+    private static final Logger logger = LoggerFactory.getLogger(InformacionAndroid.class);
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -23,7 +23,7 @@ public class Informacion {
             @QueryParam("size") @DefaultValue("10") int size) {
         
         try {
-            List<Alojamiento> alojamientos = AlojaminetoDao.encontrarAlojamientosPaginados(page, size);
+            List<Alojamiento> alojamientos = AlojamientoDao.encontrarAlojamientosPaginados(page, size);
             
 
             JSONArray alojamientosJsonArray = new JSONArray();

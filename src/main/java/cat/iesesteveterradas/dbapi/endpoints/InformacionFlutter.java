@@ -1,51 +1,59 @@
 package cat.iesesteveterradas.dbapi.endpoints;
 
+import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cat.iesesteveterradas.dbapi.persistencia.Alojamiento;
-import cat.iesesteveterradas.dbapi.persistencia.AlojaminetoDao;
+import cat.iesesteveterradas.dbapi.persistencia.AlojamientoDao;
+import cat.iesesteveterradas.dbapi.persistencia.Propietario;
+import cat.iesesteveterradas.dbapi.persistencia.PropietarioDao;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-@Path("/informacion/flutter")
+@Path("/flutter/informacion")
 public class InformacionFlutter {
-    private static final Logger logger = LoggerFactory.getLogger(Informacion.class);
+    private static final Logger logger = LoggerFactory.getLogger(InformacionFlutter.class);
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response informacionFlutter(String jsonInput) {
-
+    public Response informacionAndroid(String jsonInput) {
+        
         try {
             JSONObject input = new JSONObject(jsonInput);
-            String id = input.optString("id", null);
+            String email = input.optString("email", null);
+            String page = input.optString("page", null);
+            String size = input.optString("size", null);
 
+            Propietario id = PropietarioDao.encontrarPropietarioPorEmail(email);
+            List<Alojamiento> alojamientos = AlojamientoDao.encontrarAlojamientosPorPropietarioPaginados(id.getPropietarioID(),Integer.parseInt(page), Integer.parseInt(size));
+            
 
-            if (id == null || id.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Email requerido\"}").build();
-            }
-
-
-
-            Alojamiento alojamiento = AlojaminetoDao.encontrarAlojamientoPorId(Integer.parseInt(id));
             JSONArray alojamientosJsonArray = new JSONArray();
-            JSONObject alojamientoJson = new JSONObject();
-            alojamientoJson.put("nombre", alojamiento.getNombre());
-            alojamientoJson.put("descripcion", alojamiento.getDescripcion());
-            alojamientoJson.put("direccion", alojamiento.getDireccion());
-            alojamientoJson.put("capacidad", alojamiento.getCapacidad());
-            alojamientoJson.put("reglas", alojamiento.getReglas());
-            alojamientoJson.put("precioPorNoche", alojamiento.getPrecioPorNoche());
-            alojamientoJson.put("urlFoto", alojamiento.getUrlFoto());
-            alojamientoJson.put("alojamientoID", alojamiento.getAlojamientoID());
-            if (alojamiento.getPropietario() != null) {
-                alojamientoJson.put("nombrePropietario", alojamiento.getPropietario().getNombre());
-            } else {
-                alojamientoJson.put("nombrePropietario", "No disponible");
+            for (Alojamiento alojamiento : alojamientos) {
+                JSONObject alojamientoJson = new JSONObject();
+                alojamientoJson.put("nombre", alojamiento.getNombre());
+                alojamientoJson.put("descripcion", alojamiento.getDescripcion());
+                alojamientoJson.put("direccion", alojamiento.getDireccion());
+                alojamientoJson.put("capacidad", alojamiento.getCapacidad());
+                alojamientoJson.put("reglas", alojamiento.getReglas());
+                alojamientoJson.put("precioPorNoche", alojamiento.getPrecioPorNoche());
+                alojamientoJson.put("urlFoto", alojamiento.getUrlFoto());
+                alojamientoJson.put("alojamientoID", alojamiento.getAlojamientoID());
+
+                
+                if (alojamiento.getPropietario() != null) {
+                    alojamientoJson.put("nombrePropietario", alojamiento.getPropietario().getNombre()); // Asegúrate de que getNombre() existe en Propietario
+                } else {
+                    alojamientoJson.put("nombrePropietario", "No disponible");
+                }
+
+                alojamientosJsonArray.put(alojamientoJson);
             }
-            alojamientosJsonArray.put(alojamientoJson);
+
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");
             jsonResponse.put("message", "Datos de alojamientos obtenidos correctamente.");

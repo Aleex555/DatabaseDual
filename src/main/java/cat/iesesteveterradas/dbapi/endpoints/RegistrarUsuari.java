@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import cat.iesesteveterradas.dbapi.persistencia.PropietarioDao;
 import cat.iesesteveterradas.dbapi.persistencia.UsuarisDao;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;

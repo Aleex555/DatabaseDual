@@ -39,6 +39,18 @@ public class Alojamiento {
     @OneToMany(mappedBy = "alojamiento", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Reserva> reservas = new HashSet<>();
 
+    public Alojamiento(String nombre, String descripcion, String direccion, int capacidad, String reglas, double precioPorNoche, String urlFoto, int puntuaje, Propietario propietario) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.direccion = direccion;
+        this.capacidad = capacidad;
+        this.reglas = reglas;
+        this.precioPorNoche = precioPorNoche;
+        this.urlFoto = urlFoto;
+        this.puntuaje = puntuaje;
+        this.propietario = propietario;
+    }
+
     public Alojamiento() {
     }
 

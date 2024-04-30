@@ -4,6 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.hibernate.query.Query;
 
 public class PropietarioDao {
     private static final Logger logger = LoggerFactory.getLogger(PropietarioDao.class);
@@ -65,6 +66,24 @@ public class PropietarioDao {
             }
         } catch (Exception e) {
             logger.error("Error al buscar el propietario con ID: {}", propietarioID, e);
+        }
+        return propietario;
+    }
+
+    public static Propietario encontrarPropietarioPorEmail(String email) {
+        Propietario propietario = null;
+        try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
+            Query<Propietario> query = session.createQuery("FROM Propietario WHERE emailContacto = :email", Propietario.class);
+            query.setParameter("email", email);
+            propietario = query.uniqueResult();
+
+            if (propietario != null) {
+                logger.info("Propietario encontrado con el nombre: {}", email);
+            } else {
+                logger.info("No se encontró ningún propietario con el nombre: {}", email);
+            }
+        } catch (Exception e) {
+            logger.error("Error al buscar el propietario con el nombre: {}", email, e);
         }
         return propietario;
     }
