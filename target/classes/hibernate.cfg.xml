@@ -5,9 +5,9 @@
     <session-factory>
         <!-- Database connection settings -->
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3307/hostelhunter</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/hostelhunter</property>
         <property name="hibernate.connection.username">alex</property>
-        <property name="hibernate.connection.password">tu_contraseña</property>
+        <property name="hibernate.connection.password">1234</property>
 
         <!-- JDBC connection pool (use the built-in) -->
         <property name="hibernate.connection.pool_size">10</property>
