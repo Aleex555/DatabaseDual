@@ -61,7 +61,8 @@ public class UpdateUsuario {
             }
             logger.info(base64);
             String url = "";
-            byte[] data = Base64.getDecoder().decode(base64);
+            byte[] data = Base64.getUrlDecoder().decode(base64);
+            ;
             File tempFile = null;
             FileOutputStream fos = null;
             String fileNamePart = base64.length() > 7 ? base64.substring(0, 7) : base64;
