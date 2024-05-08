@@ -33,7 +33,7 @@ public class UpdateUsuario {
             JSONObject input = new JSONObject(jsonInput);
             
             String email = input.optString("email", null);
-            String contrasena = input.optString("contraseña", null);
+            String nombre = input.optString("nombre", null);
             String telefono = input.optString("telefono", null);
             String base64 = input.optString("base64", null);
 
@@ -42,7 +42,7 @@ public class UpdateUsuario {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Email requerido\"}").build();
             }
 
-            if (contrasena == null || contrasena.trim().isEmpty()) {
+            if (nombre == null || nombre.trim().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Contraseña requerida \"}").build();
             }
 
