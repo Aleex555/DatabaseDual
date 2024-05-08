@@ -19,26 +19,28 @@ public class ArchivoDrive {
             @SuppressWarnings("deprecation")
             GoogleCredential credential = GoogleCredential.fromStream(new FileInputStream("./data/dual-421316-20d20209617c.json"))
                     .createScoped(Collections.singleton(DriveScopes.DRIVE));
-
+    
             Drive service = new Drive.Builder(new NetHttpTransport(), new GsonFactory(), credential)
                     .setApplicationName("Application Name")
                     .build();
-
+    
+            String mimeType = obtenerMimeType(archivo);  // Método para obtener el tipo MIME
+    
             File fileMetadata = new File();
             fileMetadata.setName(archivo.getName());
             fileMetadata.setParents(Collections.singletonList("1P14lP-2kdntM7Oiug-sR5yKvhrp2PgET"));
-
-            FileContent mediaContent = new FileContent("mimeType", archivo);
+    
+            FileContent mediaContent = new FileContent(mimeType, archivo);
             File file = service.files().create(fileMetadata, mediaContent)
                     .setFields("id")
                     .execute();
-
+    
             // Cambio de permisos
             Permission permission = new Permission();
             permission.setType("anyone");
             permission.setRole("reader");
             service.permissions().create(file.getId(), permission).execute();
-
+    
             // Retorna URL de visualización
             return "https://drive.google.com/uc?export=view&id=" + file.getId();
         } catch (IOException e) {
@@ -46,4 +48,16 @@ public class ArchivoDrive {
             return null; // o manejar de otra manera
         }
     }
+    
+    private String obtenerMimeType(java.io.File archivo) {
+        String nombreArchivo = archivo.getName();
+        if (nombreArchivo.endsWith(".jpg") || nombreArchivo.endsWith(".jpeg")) {
+            return "image/jpeg";
+        } else if (nombreArchivo.endsWith(".png")) {
+            return "image/png";
+        } else {
+            return "application/octet-stream";  // Tipo genérico por defecto
+        }
+    }
+    
 }
