@@ -17,7 +17,7 @@ public class ArchivoDrive {
     public String subirArchivoADrive(java.io.File archivo) {
         try {
             @SuppressWarnings("deprecation")
-            GoogleCredential credential = GoogleCredential.fromStream(new FileInputStream("/data/dual-421316-20d20209617c.json"))
+            GoogleCredential credential = GoogleCredential.fromStream(new FileInputStream("./data/dual-421316-20d20209617c.json"))
                     .createScoped(Collections.singleton(DriveScopes.DRIVE));
 
             Drive service = new Drive.Builder(new NetHttpTransport(), new GsonFactory(), credential)
