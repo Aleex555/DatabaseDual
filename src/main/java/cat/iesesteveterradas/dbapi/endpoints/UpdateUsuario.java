@@ -36,10 +36,16 @@ public class UpdateUsuario {
             String nombre = input.optString("nombre", null);
             String telefono = input.optString("telefono", null);
             String base64 = input.optString("base64", null);
+            String id = input.optString("id", null);
+
 
             // Validación para 'email'
             if (email == null || email.trim().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Email requerido\"}").build();
+            }
+
+            if (id == null || id.trim().isEmpty()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Id requerido\"}").build();
             }
 
             if (nombre == null || nombre.trim().isEmpty()) {
@@ -53,7 +59,7 @@ public class UpdateUsuario {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Base64 requerido \"}").build();
             }
 
-            
+            String url = "";
             byte[] data = Base64.getDecoder().decode(base64);
             File tempFile = null;
             FileOutputStream fos = null;
@@ -68,10 +74,10 @@ public class UpdateUsuario {
                 
                 // Usar la clase ArchivoDrive para subir el archivo
                 ArchivoDrive archivoDrive = new ArchivoDrive();
-                String url = archivoDrive.subirArchivoADrive(tempFile);
+                url = archivoDrive.subirArchivoADrive(tempFile);
                 System.out.println("Archivo subido. URL de visualización: " + url);
                 
-                // Borrar el archivo temporal
+                
                 tempFile.delete();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -87,7 +93,8 @@ public class UpdateUsuario {
                     tempFile.delete(); // Asegura que el archivo temporal se elimine incluso en caso de error.
                 }
             }
-    
+            
+            UsuarisDao.actualizarUsuario(id, nombre, email, telefono, url);
 
 
 
@@ -97,7 +104,7 @@ public class UpdateUsuario {
 
             JSONObject userData = new JSONObject();
             jsonResponse.put("status", "OK");
-            jsonResponse.put("message", "Credenciales correctas");
+            jsonResponse.put("message", "Credenciales actualizadas correctamente");
             
 
             // Añadir el objeto "data" al JSON de respuesta

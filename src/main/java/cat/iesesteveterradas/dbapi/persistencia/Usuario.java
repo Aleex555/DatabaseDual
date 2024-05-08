@@ -24,6 +24,7 @@ public class Usuario {
     private String email;
     private String contrasena;
     private String telefono;
+    private String urlFotoPerfil;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Reserva> reservas = new HashSet<>();
@@ -52,6 +53,14 @@ public class Usuario {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String geturlFotoPerfil() {
+        return urlFotoPerfil;
+    }
+
+    public void seturlFotoPerfil(String urlFotoPerfil) {
+        this.urlFotoPerfil = urlFotoPerfil;
     }
 
     public String getEmail() {

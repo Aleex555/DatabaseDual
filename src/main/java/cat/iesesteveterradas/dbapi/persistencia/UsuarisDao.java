@@ -52,5 +52,53 @@ public class UsuarisDao {
         }
         return usuario;
     }
+
+    public static Usuario encontrarUsuarioPorUserID(String userID) {
+        Usuario usuario = null;
+        try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
+            usuario = session.createQuery("FROM Usuario WHERE userID = :userID", Usuario.class)
+                             .setParameter("userID", userID)
+                             .uniqueResult();
+            if (usuario != null) {
+                logger.info("Usuario encontrado con el userID: {}", userID);
+            } else {
+                logger.info("No se encontró ningún usuario con el userID: {}", userID);
+            }
+        } catch (Exception e) {
+            logger.error("Error al buscar el usuario con userID: {}", userID, e);
+        }
+        return usuario;
+    }
+
+    @SuppressWarnings("deprecation")
+    public static boolean actualizarUsuario(String userID, String nombre, String email, String telefono, String urlFotoPerfil) {
+        Session session = SessionFactoryManager.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Usuario usuario = encontrarUsuarioPorUserID(userID);
+            if (usuario != null) {
+                usuario.setNombre(nombre);
+                usuario.setEmail(email);
+                usuario.setTelefono(telefono);
+                usuario.seturlFotoPerfil(urlFotoPerfil);
+                session.update(usuario);
+                tx.commit();
+                logger.info("Usuario actualizado con éxito: {}", userID);
+                return true;
+            } else {
+                logger.info("No se encontró el usuario: {}", userID);
+                return false;
+            }
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            logger.error("Error al actualizar el usuario con userID: {}", userID, e);
+            return false;
+        } finally {
+            session.close();
+        }
+    }
+    
+    
     
 }
