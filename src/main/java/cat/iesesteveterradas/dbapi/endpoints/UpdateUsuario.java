@@ -16,19 +16,19 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 @Path("/usuari/login")
-public class UsuarisLogin {
+public class UpdateUsuario {
     private static final Logger logger = LoggerFactory.getLogger(UsuarisDao.class);
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response loginUsuari(String jsonInput) {
+    public Response updateUsuario(String jsonInput) {
         
         try {
             JSONObject input = new JSONObject(jsonInput);
             
             String email = input.optString("email", null);
             String contrasena = input.optString("contraseña", null);
-            String tipo = input.optString("tipo", null);
+            String telefono = input.optString("telefono", null);
 
             // Validación para 'email'
             if (email == null || email.trim().isEmpty()) {
@@ -39,36 +39,18 @@ public class UsuarisLogin {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Contraseña requerida \"}").build();
             }
 
-            if (tipo == null || tipo.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Contraseña requerida \"}").build();
+            if (telefono == null || telefono.trim().isEmpty()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Telefono requerida \"}").build();
             }
 
-            Propietario propietario = new Propietario();
-            Usuario user = new Usuario();
+            
+
+
+
 
             JSONObject jsonResponse = new JSONObject();
 
             JSONObject userData = new JSONObject();
-
-            if(tipo.equals("propietario") ){
-                propietario = PropietarioDao.encontrarPropietarioPorEmailYContrasena(email, contrasena);
-                if (propietario == null){
-                    return Response.status(Response.Status.ACCEPTED).entity("{\"status\":\"ERROR\",\"message\":\"Propietario no encontrado\"}").build();
-                }else{
-                    userData.put("Id", propietario.getPropietarioID());
-                }
-            }else{
-                user  = UsuarisDao.encontrarUsuarioPorEmailYContrasena(email, contrasena);
-                if (user == null){
-                    return Response.status(Response.Status.ACCEPTED).entity("{\"status\":\"ERROR\",\"message\":\"Usuario no encontrado\"}").build();
-                }else{
-                    userData.put("id", user.getUserID());
-                    userData.put("gmail",user.getEmail());
-                    userData.put("telefono",user.getTelefono());
-                    userData.put("nombre",user.getNombre());
-                }
-            }
-
             jsonResponse.put("status", "OK");
             jsonResponse.put("message", "Credenciales correctas");
             

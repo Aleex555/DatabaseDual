@@ -143,6 +143,42 @@
             <version>5.7.0</version>
             <scope>test</scope>
         </dependency>
+       <!-- https://mvnrepository.com/artifact/com.google.api-client/google-api-client -->
+<dependency>
+    <groupId>com.google.api-client</groupId>
+    <artifactId>google-api-client</artifactId>
+    <version>1.34.0</version>
+</dependency>
+
+
+    <!-- https://mvnrepository.com/artifact/com.google.oauth-client/google-oauth-client -->
+<dependency>
+    <groupId>com.google.oauth-client</groupId>
+    <artifactId>google-oauth-client</artifactId>
+    <version>1.34.1</version>
+</dependency>
+
+<!-- Dependencia para GsonFactory -->
+<dependency>
+    <groupId>com.google.http-client</groupId>
+    <artifactId>google-http-client-gson</artifactId>
+    <version>1.42.1</version>
+</dependency>
+
+
+    <!-- https://mvnrepository.com/artifact/com.google.apis/google-api-services-drive -->
+<dependency>
+    <groupId>com.google.apis</groupId>
+    <artifactId>google-api-services-drive</artifactId>
+    <version>v3-rev197-1.25.0</version>
+</dependency>
+
+    <!-- JSON Library -->
+    <dependency>
+        <groupId>org.json</groupId>
+        <artifactId>json</artifactId>
+        <version>20210307</version>
+    </dependency>
     </dependencies>
     <profiles>
         <profile>

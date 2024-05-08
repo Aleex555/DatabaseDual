@@ -1,14 +1,10 @@
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/AppMain.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/DBApi.java
-/home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/endpoints/ExemplesResource.java
-/home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/endpoints/HolaResource.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/endpoints/InformacionAndroid.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/endpoints/InformacionFlutter.java
-/home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/endpoints/IniciResource.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/endpoints/MeterAlojamiento.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/endpoints/PedirUnAlojamiento.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/endpoints/RegistrarUsuari.java
-/home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/endpoints/SeguretatResource.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/endpoints/UsuarisLogin.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Alojamiento.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/persistencia/AlojamientoDao.java
@@ -16,6 +12,7 @@
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/persistencia/PropietarioDao.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Reserva.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/persistencia/SessionFactoryManager.java
+/home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/persistencia/SubirArchivodrive.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Usuario.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/persistencia/UsuarisDao.java
 /home/super/DatabaseDual/src/main/java/cat/iesesteveterradas/dbapi/respostes/RespostaBasica.java
