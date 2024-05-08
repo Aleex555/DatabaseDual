@@ -37,6 +37,7 @@ public class UpdateUsuario {
             String telefono = input.optString("telefono", null);
             String base64 = input.optString("base64", null);
             String id = input.optString("id", null);
+            
 
 
             // Validación para 'email'
@@ -58,7 +59,7 @@ public class UpdateUsuario {
             if (base64 == null || base64.trim().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Base64 requerido \"}").build();
             }
-
+            logger.info(base64);
             String url = "";
             byte[] data = Base64.getDecoder().decode(base64);
             File tempFile = null;
