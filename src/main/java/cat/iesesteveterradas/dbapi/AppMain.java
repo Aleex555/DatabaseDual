@@ -59,7 +59,7 @@ public class AppMain {
 
             // Assigna valors per defecte si les opcions no estan presents
             String host = cmd.hasOption("host") ? cmd.getOptionValue("host") : "0.0.0.0";
-            int port = cmd.hasOption("port") ? Integer.parseInt(cmd.getOptionValue("port")) : 8889;
+            int port = cmd.hasOption("port") ? Integer.parseInt(cmd.getOptionValue("port")) : 80;
 
             logger.info("Iniciant hibernate...");
             SessionFactoryManager.getSessionFactory();
