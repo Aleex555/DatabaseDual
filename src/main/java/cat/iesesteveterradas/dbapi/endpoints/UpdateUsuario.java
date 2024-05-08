@@ -15,7 +15,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-@Path("/usuari/login")
+@Path("/usuari/update")
 public class UpdateUsuario {
     private static final Logger logger = LoggerFactory.getLogger(UsuarisDao.class);
     @POST
