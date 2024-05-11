@@ -22,7 +22,7 @@ public class AlojamientoDao {
             alojamiento = new Alojamiento(nombre, descripcion, direccion,capacidad,reglas,precioPorNoche,urlFoto,puntuaje,propietario);
             session.save(alojamiento);
             tx.commit();
-            logger.info("Nuevo usuario creado con el nickname: {}", nombre);
+            logger.info("Nuevo alojamiento creado con el nickname: {}", nombre);
         } catch (Exception e) {
             if (tx != null) {
                 tx.rollback();

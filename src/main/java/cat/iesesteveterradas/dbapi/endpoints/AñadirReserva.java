@@ -1,23 +1,24 @@
 package cat.iesesteveterradas.dbapi.endpoints;
 
-import cat.iesesteveterradas.dbapi.persistencia.Reserva;
-import cat.iesesteveterradas.dbapi.persistencia.Alojamiento;
-import cat.iesesteveterradas.dbapi.persistencia.AlojamientoDao;
-import cat.iesesteveterradas.dbapi.persistencia.ReservaDao;
+import java.text.SimpleDateFormat;
+import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jakarta.ws.rs.*;
+import cat.iesesteveterradas.dbapi.persistencia.AlojamientoDao;
+import cat.iesesteveterradas.dbapi.persistencia.Reserva;
+import cat.iesesteveterradas.dbapi.persistencia.ReservaDao;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.text.SimpleDateFormat;
-import java.util.List;
 
-@Path("/reservas/info")
-public class InformacionReserva {
-    private static final Logger logger = LoggerFactory.getLogger(InformacionReserva.class);
+public class AñadirReserva {
+     private static final Logger logger = LoggerFactory.getLogger(InformacionReserva.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @POST
