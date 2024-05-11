@@ -27,7 +27,7 @@ public class PedirUnAlojamiento {
             if (id == null || id.trim().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Email requerido\"}").build();
             }
-
+            
 
 
             Alojamiento alojamiento = AlojamientoDao.encontrarAlojamientoPorId(Integer.parseInt(id));

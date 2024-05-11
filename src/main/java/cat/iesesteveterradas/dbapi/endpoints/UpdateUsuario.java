@@ -59,7 +59,7 @@ public class UpdateUsuario {
             if (base64 == null || base64.trim().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Base64 requerido \"}").build();
             }
-            logger.info(base64);
+            
             String url = "";
             byte[] data = Base64.getDecoder().decode(base64.toString());
             ;
@@ -99,12 +99,18 @@ public class UpdateUsuario {
             UsuarisDao.actualizarUsuario(id, nombre, email, telefono, url);
 
 
-
+            Usuario user = UsuarisDao.encontrarUsuarioPorUserID(id);
+            
 
 
             JSONObject jsonResponse = new JSONObject();
 
             JSONObject userData = new JSONObject();
+            userData.put("id", user.getUserID());
+            userData.put("gmail",user.getEmail());
+            userData.put("telefono",user.getTelefono());
+            userData.put("nombre",user.getNombre());
+            userData.put("url", user.geturlFotoPerfil());
             jsonResponse.put("status", "OK");
             jsonResponse.put("message", "Credenciales actualizadas correctamente");
             
