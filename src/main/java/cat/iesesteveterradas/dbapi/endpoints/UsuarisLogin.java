@@ -66,6 +66,7 @@ public class UsuarisLogin {
                     userData.put("gmail",user.getEmail());
                     userData.put("telefono",user.getTelefono());
                     userData.put("nombre",user.getNombre());
+                    userData.put("url",user.geturlFotoPerfil());
                 }
             }
 
