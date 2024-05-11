@@ -7,10 +7,13 @@ import org.slf4j.LoggerFactory;
 import cat.iesesteveterradas.dbapi.persistencia.Alojamiento;
 import cat.iesesteveterradas.dbapi.persistencia.AlojamientoDao;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+
+@Path("/editar/alojamiento")
 public class EditarAlojamiento {
     private static final Logger logger = LoggerFactory.getLogger(PedirUnAlojamiento.class);
     @POST
