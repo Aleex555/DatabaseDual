@@ -12,7 +12,7 @@ import java.util.List;
 public class ReservaDao {
     private static final Logger logger = LoggerFactory.getLogger(ReservaDao.class);
 
-    public static Reserva crearReserva(Propietario propietario, Alojamiento alojamiento, Date fechaInicio, Date fechaFin, double total) {
+    public static Reserva crearReserva(Usuario usuario, Alojamiento alojamiento, Date fechaInicio, Date fechaFin, double total) {
         Session session = SessionFactoryManager.getSessionFactory().openSession();
         Transaction tx = null;
         Reserva reserva = null;
@@ -20,14 +20,14 @@ public class ReservaDao {
         try {
             tx = session.beginTransaction();
             reserva = new Reserva();
-            reserva.setPropietario(propietario);
+            reserva.setUsuario(usuario);
             reserva.setAlojamiento(alojamiento);
             reserva.setFechaInicio(fechaInicio);
             reserva.setFechaFin(fechaFin);
             reserva.setTotal(total);
             session.save(reserva);
             tx.commit();
-            logger.info("Reserva creada con éxito para el usuario: {}", propietario.getPropietarioID());
+            logger.info("Reserva creada con éxito para el usuario: {}", usuario.getUserID());
         } catch (Exception e) {
             if (tx != null) {
                 tx.rollback();
@@ -62,7 +62,7 @@ public class ReservaDao {
         return reservas;
     }
 
-    public static List<Reserva> encontrarReservasPorAlojamiento(Alojamiento alojamiento) {
+     public static List<Reserva> encontrarReservasPorAlojamiento(Alojamiento alojamiento) {
         List<Reserva> reservas = null;
         if (alojamiento == null || alojamiento.getAlojamientoID() == null) {
             logger.error("El alojamiento proporcionado es nulo o no tiene un ID válido.");

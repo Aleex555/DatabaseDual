@@ -16,8 +16,8 @@ public class Reserva {
     private Alojamiento alojamiento;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PropietarioID")
-    private Propietario propietario;
+    @JoinColumn(name = "userID")
+    private Usuario usuario;
 
     private Date fechaInicio;
     private Date fechaFin;
@@ -42,12 +42,12 @@ public class Reserva {
         this.alojamiento = alojamiento;
     }
 
-    public Propietario getPropietario() {
-        return propietario;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setPropietario(Propietario propietario) {
-        this.propietario = propietario;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public Date getFechaInicio() {
