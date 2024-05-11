@@ -13,10 +13,13 @@ import cat.iesesteveterradas.dbapi.persistencia.Reserva;
 import cat.iesesteveterradas.dbapi.persistencia.ReservaDao;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+
+@Path("/reservas/añadir")
 public class AñadirReserva {
      private static final Logger logger = LoggerFactory.getLogger(InformacionReserva.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

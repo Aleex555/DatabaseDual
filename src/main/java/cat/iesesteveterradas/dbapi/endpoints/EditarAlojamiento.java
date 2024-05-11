@@ -29,7 +29,7 @@ public class EditarAlojamiento {
             String capacidad = input.optString("capacidad", null);
             String reglas = input.optString("reglas", null);
             String precioPorNoche = input.optString("precioPorNoche", null);
-            String urlFoto = input.optString("email", null);
+            String urlFoto = input.optString("url", null);
 
 
             if (alojamientoID == null || alojamientoID.trim().isEmpty()) {
