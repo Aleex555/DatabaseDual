@@ -31,7 +31,7 @@ public class PedirUnAlojamiento {
 
 
             Alojamiento alojamiento = AlojamientoDao.encontrarAlojamientoPorId(Integer.parseInt(id));
-            JSONArray alojamientosJsonArray = new JSONArray();
+            
             JSONObject alojamientoJson = new JSONObject();
             alojamientoJson.put("nombre", alojamiento.getNombre());
             alojamientoJson.put("descripcion", alojamiento.getDescripcion());
@@ -46,11 +46,11 @@ public class PedirUnAlojamiento {
             } else {
                 alojamientoJson.put("nombrePropietario", "No disponible");
             }
-            alojamientosJsonArray.put(alojamientoJson);
+            
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");
             jsonResponse.put("message", "Datos de alojamientos obtenidos correctamente.");
-            jsonResponse.put("data", alojamientosJsonArray);
+            jsonResponse.put("data", alojamientoJson);
 
             return Response.ok(jsonResponse.toString(4)).build(); // 4 espacios para indentar
         } catch (Exception e) {
