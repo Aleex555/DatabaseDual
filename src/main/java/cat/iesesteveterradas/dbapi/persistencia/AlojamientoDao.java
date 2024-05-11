@@ -20,7 +20,7 @@ public class AlojamientoDao {
         try {
             tx = session.beginTransaction();
             alojamiento = new Alojamiento(nombre, descripcion, direccion,capacidad,reglas,precioPorNoche,urlFoto,puntuaje,propietario);
-            session.save(propietario);
+            session.save(alojamiento);
             tx.commit();
             logger.info("Nuevo usuario creado con el nickname: {}", nombre);
         } catch (Exception e) {

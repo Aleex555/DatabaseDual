@@ -144,4 +144,24 @@ public class Alojamiento {
     public void setPropietario(Propietario propietario) {
         this.propietario = propietario;
     }
+
+    // Método para agregar una reserva
+    public void addReserva(Reserva reserva) {
+        reservas.add(reserva);
+        reserva.setAlojamiento(this);
+    }
+
+    // Método para eliminar una reserva
+    public void removeReserva(Reserva reserva) {
+        reservas.remove(reserva);
+        reserva.setAlojamiento(null);
+    }
+
+    public Set<Reserva> getReservas() {
+        return reservas;
+    }
+
+    public void setReservas(Set<Reserva> reservas) {
+        this.reservas = reservas;
+    }
 }

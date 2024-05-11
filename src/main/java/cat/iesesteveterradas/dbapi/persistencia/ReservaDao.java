@@ -12,7 +12,7 @@ import java.util.List;
 public class ReservaDao {
     private static final Logger logger = LoggerFactory.getLogger(ReservaDao.class);
 
-    public static Reserva crearReserva(Usuario usuario, Alojamiento alojamiento, Date fechaInicio, Date fechaFin, double total) {
+    public static Reserva crearReserva(Propietario propietario, Alojamiento alojamiento, Date fechaInicio, Date fechaFin, double total) {
         Session session = SessionFactoryManager.getSessionFactory().openSession();
         Transaction tx = null;
         Reserva reserva = null;
@@ -20,14 +20,14 @@ public class ReservaDao {
         try {
             tx = session.beginTransaction();
             reserva = new Reserva();
-            reserva.setUsuario(usuario);
+            reserva.setPropietario(propietario);
             reserva.setAlojamiento(alojamiento);
             reserva.setFechaInicio(fechaInicio);
             reserva.setFechaFin(fechaFin);
             reserva.setTotal(total);
             session.save(reserva);
             tx.commit();
-            logger.info("Reserva creada con éxito para el usuario: {}", usuario.getUserID());
+            logger.info("Reserva creada con éxito para el usuario: {}", propietario.getPropietarioID());
         } catch (Exception e) {
             if (tx != null) {
                 tx.rollback();
@@ -62,20 +62,26 @@ public class ReservaDao {
         return reservas;
     }
 
-    public static Reserva encontrarReservaPorId(long reservaId) {
-        Reserva reserva = null;
-
-        try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
-            reserva = session.get(Reserva.class, reservaId);
-            if (reserva != null) {
-                logger.info("Se encontró la reserva con ID {}", reservaId);
-            } else {
-                logger.info("No se encontró ninguna reserva con ID {}", reservaId);
-            }
-        } catch (Exception e) {
-            logger.error("Error al buscar la reserva con ID {}", reservaId, e);
+    public static List<Reserva> encontrarReservasPorAlojamiento(Alojamiento alojamiento) {
+        List<Reserva> reservas = null;
+        if (alojamiento == null || alojamiento.getAlojamientoID() == null) {
+            logger.error("El alojamiento proporcionado es nulo o no tiene un ID válido.");
+            return reservas; // Retorna null para indicar un problema con los parámetros de entrada.
         }
 
-        return reserva;
+        try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
+            String hql = "FROM Reserva r WHERE r.alojamiento = :alojamiento";
+            Query<Reserva> query = session.createQuery(hql, Reserva.class);
+            query.setParameter("alojamiento", alojamiento);
+            reservas = query.list();
+            if (!reservas.isEmpty()) {
+                logger.info("Se encontraron {} reservas para el alojamiento con ID {}", reservas.size(), alojamiento.getAlojamientoID());
+            } else {
+                logger.info("No se encontraron reservas para el alojamiento con ID {}", alojamiento.getAlojamientoID());
+            }
+        } catch (Exception e) {
+            logger.error("Error al buscar las reservas para el alojamiento con ID {}", alojamiento.getAlojamientoID(), e);
+        }
+        return reservas;
     }
 }
