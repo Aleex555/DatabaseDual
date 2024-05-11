@@ -57,7 +57,7 @@ public class EditarAlojamiento {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"URL de foto requerida\"}").build();
             }
 
-            System.out.println(capacidad);
+            
             
             
             
