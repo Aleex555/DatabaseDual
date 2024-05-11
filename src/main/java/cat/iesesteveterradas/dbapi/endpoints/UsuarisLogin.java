@@ -55,7 +55,7 @@ public class UsuarisLogin {
                 if (propietario == null){
                     return Response.status(Response.Status.ACCEPTED).entity("{\"status\":\"ERROR\",\"message\":\"Propietario no encontrado\"}").build();
                 }else{
-                    userData.put("Id", propietario.getPropietarioID());
+                    userData.put("id", propietario.getPropietarioID());
                 }
             }else{
                 user  = UsuarisDao.encontrarUsuarioPorEmailYContrasena(email, contrasena);

@@ -95,4 +95,37 @@ public class AlojamientoDao {
 
         return alojamiento;
     }
+
+    @SuppressWarnings("deprecation")
+public static boolean actualizarAlojamiento(int alojamientoId, String descripcion, String nombre, String direccion, String capacidad, String reglas, String precioPorNoche, String urlFoto) {
+    Session session = SessionFactoryManager.getSessionFactory().openSession();
+    Transaction tx = null;
+    try {
+        tx = session.beginTransaction();
+        Alojamiento alojamiento = encontrarAlojamientoPorId(alojamientoId);
+        if (alojamiento != null) {
+            alojamiento.setDescripcion(descripcion);
+            alojamiento.setNombre(nombre);
+            alojamiento.setDireccion(direccion);
+            alojamiento.setCapacidad(Integer.parseInt(capacidad));
+            alojamiento.setReglas(reglas);
+            alojamiento.setPrecioPorNoche(Double.parseDouble(precioPorNoche));
+            alojamiento.setUrlFoto(urlFoto);
+            session.update(alojamiento);
+            tx.commit();
+            logger.info("Alojamiento actualizado con éxito: {}", alojamientoId);
+            return true;
+        } else {
+            logger.info("No se encontró el alojamiento: {}", alojamientoId);
+            return false;
+        }
+    } catch (Exception e) {
+        if (tx != null) tx.rollback();
+        logger.error("Error al actualizar el alojamiento con ID: {}", alojamientoId, e);
+        return false;
+    } finally {
+        session.close();
+    }
+}
+
 }

@@ -26,7 +26,7 @@ public class MeterAlojamiento {
             JSONObject input = new JSONObject(jsonInput);
             String capacidad = input.optString("capacidad", null);
             String precio = input.optString("preciopornoche", null);
-            String email = input.optString("email", null);
+            String idpropietario = input.optString("id", null);
             String descripcion = input.optString("descripcion", null);
             String nombre = input.optString("nombre", null);
             String reglas = input.optString("reglas", null);
@@ -40,7 +40,7 @@ public class MeterAlojamiento {
             if (precio == null || precio.trim().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"precio requerido\"}").build();
             }
-            if (email == null || email.trim().isEmpty()) {
+            if (idpropietario == null || idpropietario.trim().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Email requerido\"}").build();
             }
             if (descripcion == null || descripcion.trim().isEmpty()) {
@@ -59,7 +59,7 @@ public class MeterAlojamiento {
 
 
 
-            Alojamiento alojamiento = AlojamientoDao.crearAlojamiento(nombre, descripcion, direccion, Integer.parseInt(capacidad), reglas, Double.parseDouble(precio), urlFoto, 0, PropietarioDao.encontrarPropietarioPorEmail(email));
+            Alojamiento alojamiento = AlojamientoDao.crearAlojamiento(nombre, descripcion, direccion, Integer.parseInt(capacidad), reglas, Double.parseDouble(precio), urlFoto, 0, PropietarioDao.encontrarPropietarioPorID(Integer.parseInt(idpropietario)));
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");
             jsonResponse.put("message", "Alojamiento creado correctamente");
