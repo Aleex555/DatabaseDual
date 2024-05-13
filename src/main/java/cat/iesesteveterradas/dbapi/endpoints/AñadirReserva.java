@@ -21,7 +21,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 
-@Path("/reservas/añadir")
+@Path("/reservas/anadir")
 public class AñadirReserva {
      private static final Logger logger = LoggerFactory.getLogger(InformacionReserva.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
