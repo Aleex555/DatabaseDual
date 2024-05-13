@@ -9,6 +9,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.JsonArray;
+
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -33,19 +35,25 @@ public class InformacionReserva {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"ID de alojamiento requerido\"}").build();
             }
 
-             Map<Long,Reserva> reservas = ReservaDao.encontrarReservasPorAlojamiento(AlojamientoDao.encontrarAlojamientoPorId(Integer.parseInt(alojamientoId)));
+            Map<Long,Reserva> reservas = ReservaDao.encontrarReservasPorAlojamiento(AlojamientoDao.encontrarAlojamientoPorId(Integer.parseInt(alojamientoId)));
 
             if (reservas == null || reservas.isEmpty()) {
                 return Response.status(Response.Status.NOT_FOUND).entity("{\"status\":\"ERROR\",\"message\":\"No se encontraron reservas para el alojamiento\"}").build();
             }
 
             JSONArray reservasJsonArray = new JSONArray();
-            
+
+            reservas.forEach((id, reserva) -> {
+                JSONObject reservaJson = new JSONObject();
+                reservaJson.put("start", reserva.getFechaInicio());
+                reservaJson.put("end", reserva.getFechaFin());
+                reservasJsonArray.put(reservaJson);
+            });
 
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");
             jsonResponse.put("message", "Información de las reservas obtenida correctamente.");
-            jsonResponse.put("data", reservasJsonArray);
+            jsonResponse.put("occupiedIntervals", reservasJsonArray);
 
             return Response.ok(jsonResponse.toString()).build();
         } catch (Exception e) {
