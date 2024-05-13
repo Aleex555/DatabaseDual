@@ -7,7 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ReservaDao {
     private static final Logger logger = LoggerFactory.getLogger(ReservaDao.class);
@@ -62,19 +64,22 @@ public class ReservaDao {
         return reservas;
     }
 
-     public static List<Reserva> encontrarReservasPorAlojamiento(Alojamiento alojamiento) {
-        List<Reserva> reservas = null;
+    public static Map<Long, Reserva> encontrarReservasPorAlojamiento(Alojamiento alojamiento) {
+        Map<Long, Reserva> mapaReservas = new HashMap<>();
         if (alojamiento == null || alojamiento.getAlojamientoID() == null) {
             logger.error("El alojamiento proporcionado es nulo o no tiene un ID válido.");
-            return reservas; // Retorna null para indicar un problema con los parámetros de entrada.
+            return mapaReservas; // Retorna un mapa vacío para indicar un problema con los parámetros de entrada.
         }
 
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
             String hql = "FROM Reserva r WHERE r.alojamiento = :alojamiento";
             Query<Reserva> query = session.createQuery(hql, Reserva.class);
             query.setParameter("alojamiento", alojamiento);
-            reservas = query.list();
+            List<Reserva> reservas = query.list();
             if (!reservas.isEmpty()) {
+                for (Reserva reserva : reservas) {
+                    mapaReservas.put(reserva.getReservaID(), reserva);
+                }
                 logger.info("Se encontraron {} reservas para el alojamiento con ID {}", reservas.size(), alojamiento.getAlojamientoID());
             } else {
                 logger.info("No se encontraron reservas para el alojamiento con ID {}", alojamiento.getAlojamientoID());
@@ -82,6 +87,7 @@ public class ReservaDao {
         } catch (Exception e) {
             logger.error("Error al buscar las reservas para el alojamiento con ID {}", alojamiento.getAlojamientoID(), e);
         }
-        return reservas;
+        return mapaReservas;
     }
+
 }

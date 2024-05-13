@@ -128,4 +128,32 @@ public static boolean actualizarAlojamiento(int alojamientoId, String descripcio
     }
 }
 
+
+public static boolean eliminarAlojamientoPorId(int alojamientoId) {
+    Session session = SessionFactoryManager.getSessionFactory().openSession();
+    Transaction tx = null;
+    try {
+        tx = session.beginTransaction();
+        Alojamiento alojamiento = session.get(Alojamiento.class, alojamientoId);
+        if (alojamiento != null) {
+            session.delete(alojamiento);  // Realiza la eliminación del objeto alojamiento
+            tx.commit();
+            logger.info("Alojamiento eliminado con éxito con ID {}", alojamientoId);
+            return true;
+        } else {
+            logger.info("No se encontró ningún alojamiento con ID {}", alojamientoId);
+            return false;
+        }
+    } catch (Exception e) {
+        if (tx != null) {
+            tx.rollback();
+        }
+        logger.error("Error al eliminar el alojamiento con ID {}", alojamientoId, e);
+        return false;
+    } finally {
+        session.close();
+    }
+}
+
+
 }

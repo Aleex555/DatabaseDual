@@ -2,6 +2,7 @@ package cat.iesesteveterradas.dbapi.endpoints;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -36,26 +37,14 @@ public class AñadirReserva {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"ID de alojamiento requerido\"}").build();
             }
 
-            List<Reserva> reservas = ReservaDao.encontrarReservasPorAlojamiento(AlojamientoDao.encontrarAlojamientoPorId(Integer.parseInt(alojamientoId)));
+           
 
-            if (reservas == null || reservas.isEmpty()) {
-                return Response.status(Response.Status.NOT_FOUND).entity("{\"status\":\"ERROR\",\"message\":\"No se encontraron reservas para el alojamiento\"}").build();
-            }
-
-            JSONArray reservasJsonArray = new JSONArray();
-            for (Reserva reserva : reservas) {
-                JSONObject reservaJson = new JSONObject();
-                reservaJson.put("fechaInicio", dateFormat.format(reserva.getFechaInicio()));
-                reservaJson.put("fechaFin", dateFormat.format(reserva.getFechaFin()));
-                reservaJson.put("reservaID", reserva.getReservaID());
-                reservasJsonArray.put(reservaJson);
-            }
+            
 
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");
             jsonResponse.put("message", "Información de las reservas obtenida correctamente.");
-            jsonResponse.put("data", reservasJsonArray);
-
+            
             return Response.ok(jsonResponse.toString()).build();
         } catch (Exception e) {
             logger.error("Error al obtener la información de las reservas", e);
