@@ -39,7 +39,7 @@ public class AñadirReserva {
             String usuario = input.optString("usuarioID");
             System.out.println(input);
 
-            if (alojamientoId == null) {
+            if (alojamientoId == null || alojamientoId.trim().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"ID de alojamiento requerido\"}").build();
             }
             if (fechafinal == null || fechafinal.trim().isEmpty()) {
