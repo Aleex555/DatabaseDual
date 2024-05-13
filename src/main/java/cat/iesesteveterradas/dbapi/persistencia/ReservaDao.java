@@ -14,7 +14,7 @@ import java.util.Map;
 public class ReservaDao {
     private static final Logger logger = LoggerFactory.getLogger(ReservaDao.class);
 
-    public static Reserva crearReserva(Usuario usuario, Alojamiento alojamiento, Date fechaInicio, Date fechaFin, double total) {
+    public static Reserva crearReserva(Usuario usuario, Alojamiento alojamiento, String fechaInicio, String fechaFin, double total) {
         Session session = SessionFactoryManager.getSessionFactory().openSession();
         Transaction tx = null;
         Reserva reserva = null;
