@@ -37,6 +37,7 @@ public class AñadirReserva {
             String fechafinal = input.optString("fechafinal");
             String total = input.optString("total");
             String usuario = input.optString("usuarioID");
+            System.out.println(input);
 
             if (alojamientoId == null) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"ID de alojamiento requerido\"}").build();
@@ -55,7 +56,7 @@ public class AñadirReserva {
             if (usuario == null || usuario.trim().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Id usuario requerido \"}").build();
             }
-            System.out.println(input);
+            
 
             ReservaDao.crearReserva(UsuarisDao.encontrarUsuarioPorUserID(usuario), AlojamientoDao.encontrarAlojamientoPorId(Integer.parseInt(alojamientoId)), fechainicio, fechafinal, Double.parseDouble(total));
 
