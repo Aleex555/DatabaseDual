@@ -41,8 +41,9 @@ public class Usuario {
     }
 
     @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(name = "Like", joinColumns = { @JoinColumn(name = "userID") }, inverseJoinColumns = {
-            @JoinColumn(name = "alojamientoID") })
+    @JoinTable(name = "usuario_like_alojamientos", joinColumns = {
+            @JoinColumn(name = "userID") }, inverseJoinColumns = {
+                    @JoinColumn(name = "alojamientoID") })
     private Set<Alojamiento> alojamientosLiked = new HashSet<>();
 
     public void likeAlojamiento(Alojamiento alojamiento) {
