@@ -68,14 +68,23 @@ public class EditarAlojamiento {
                         .entity("{\"status\":\"ERROR\",\"message\":\"URL de foto requerida\"}").build();
             }
 
-            // Convertir JSONArray a Set<String>
-            Set<String> urlFotos = new HashSet<>();
+            Set<String> urlsExistentes = AlojamientoDao.obtenerUrlsPorAlojamientoID(Integer.parseInt(alojamientoID));
+            Set<String> nuevasUrls = new HashSet<>();
             for (int i = 0; i < urlFotosJson.length(); i++) {
-                urlFotos.add(urlFotosJson.getString(i));
+                nuevasUrls.add(urlFotosJson.getString(i));
             }
 
+            // Determinar qué añadir y qué eliminar
+            Set<String> urlsParaAgregar = new HashSet<>(nuevasUrls);
+            urlsParaAgregar.removeAll(urlsExistentes);
+            Set<String> urlsParaEliminar = new HashSet<>(urlsExistentes);
+            urlsParaEliminar.removeAll(nuevasUrls);
+
+            AlojamientoDao.eliminarUrlsFotos(Integer.parseInt(alojamientoID), urlsParaEliminar);
+            AlojamientoDao.agregarUrlsFotos(Integer.parseInt(alojamientoID), urlsParaAgregar);
+
             AlojamientoDao.actualizarAlojamiento(Integer.parseInt(alojamientoID), descripcion, nombre, direccion,
-                    capacidad, reglas, precioPorNoche, urlFotos);
+                    capacidad, reglas, precioPorNoche);
 
             Alojamiento alojamiento = AlojamientoDao.encontrarAlojamientoPorId(Integer.parseInt(alojamientoID));
 

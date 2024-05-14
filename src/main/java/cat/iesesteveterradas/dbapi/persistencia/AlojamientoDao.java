@@ -1,5 +1,6 @@
 package cat.iesesteveterradas.dbapi.persistencia;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -111,7 +112,7 @@ public class AlojamientoDao {
 
     @SuppressWarnings("deprecation")
     public static boolean actualizarAlojamiento(int alojamientoId, String descripcion, String nombre, String direccion,
-            String capacidad, String reglas, String precioPorNoche, Set<String> urlFotos) {
+            String capacidad, String reglas, String precioPorNoche) {
         Session session = SessionFactoryManager.getSessionFactory().openSession();
         Transaction tx = null;
         try {
@@ -124,7 +125,6 @@ public class AlojamientoDao {
                 alojamiento.setCapacidad(Integer.parseInt(capacidad));
                 alojamiento.setReglas(reglas);
                 alojamiento.setPrecioPorNoche(Double.parseDouble(precioPorNoche));
-                alojamiento.setUrlFotos(urlFotos);
                 session.update(alojamiento);
                 tx.commit();
                 logger.info("Alojamiento actualizado con éxito: {}", alojamientoId);
@@ -167,6 +167,77 @@ public class AlojamientoDao {
         } finally {
             session.close();
         }
+    }
+
+    public static Set<String> urlsExistentes(int alojamientoId) {
+        Alojamiento alojamiento = encontrarAlojamientoPorId(alojamientoId);
+        if (alojamiento != null) {
+            return new HashSet<>(alojamiento.getUrlFotos());
+        } else {
+            return new HashSet<>();
+        }
+    }
+
+    public static void agregarUrlsFotos(int alojamientoId, Set<String> nuevasUrls) {
+        Session session = SessionFactoryManager.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Alojamiento alojamiento = session.get(Alojamiento.class, alojamientoId);
+            if (alojamiento != null) {
+                Set<String> urlsActuales = new HashSet<>(alojamiento.getUrlFotos());
+                urlsActuales.addAll(nuevasUrls);
+                alojamiento.setUrlFotos(urlsActuales);
+                session.update(alojamiento);
+                tx.commit();
+            }
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            logger.error("Error al agregar URLs a alojamiento con ID: {}", alojamientoId, e);
+        } finally {
+            session.close();
+        }
+    }
+
+    public static void eliminarUrlsFotos(int alojamientoId, Set<String> urlsAEliminar) {
+        Session session = SessionFactoryManager.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Alojamiento alojamiento = session.get(Alojamiento.class, alojamientoId);
+            if (alojamiento != null) {
+                Set<String> urlsActuales = new HashSet<>(alojamiento.getUrlFotos());
+                urlsActuales.removeAll(urlsAEliminar);
+                alojamiento.setUrlFotos(urlsActuales);
+                session.update(alojamiento);
+                tx.commit();
+            }
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            logger.error("Error al eliminar URLs de alojamiento con ID: {}", alojamientoId, e);
+        } finally {
+            session.close();
+        }
+    }
+
+    public static Set<String> obtenerUrlsPorAlojamientoID(int alojamientoId) {
+        Set<String> urlFotos = new HashSet<>();
+        try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
+            Alojamiento alojamiento = session.get(Alojamiento.class, alojamientoId);
+            if (alojamiento != null) {
+                urlFotos = new HashSet<>(alojamiento.getUrlFotos());
+                logger.info("Obtenidas las URLs de fotos para el alojamiento con ID {}", alojamientoId);
+            } else {
+                logger.info("No se encontró ningún alojamiento con ID {}", alojamientoId);
+            }
+        } catch (Exception e) {
+            logger.error("Error al obtener las URLs de fotos para el alojamiento con ID {}", alojamientoId, e);
+        }
+        return urlFotos;
     }
 
 }
