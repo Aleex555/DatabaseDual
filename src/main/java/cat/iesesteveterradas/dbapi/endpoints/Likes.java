@@ -3,15 +3,19 @@ package cat.iesesteveterradas.dbapi.endpoints;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 
+import org.hibernate.Session;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cat.iesesteveterradas.dbapi.persistencia.Alojamiento;
 import cat.iesesteveterradas.dbapi.persistencia.AlojamientoDao;
-import cat.iesesteveterradas.dbapi.persistencia.LikeDao;
+
 import cat.iesesteveterradas.dbapi.persistencia.Reserva;
 import cat.iesesteveterradas.dbapi.persistencia.ReservaDao;
+import cat.iesesteveterradas.dbapi.persistencia.SessionFactoryManager;
+import cat.iesesteveterradas.dbapi.persistencia.Usuario;
 import cat.iesesteveterradas.dbapi.persistencia.UsuarisDao;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
@@ -40,8 +44,17 @@ public class Likes {
                         .entity("{\"status\":\"ERROR\",\"message\":\"ID de alojamiento requerido\"}").build();
             }
 
-            LikeDao.crearLike(UsuarisDao.encontrarUsuarioPorUserID(usuarioId),
-                    AlojamientoDao.encontrarAlojamientoPorId(Integer.parseInt(alojamientoId)));
+            Usuario usuario = UsuarisDao.encontrarUsuarioPorUserID(usuarioId);
+            Alojamiento alojamiento = AlojamientoDao.encontrarAlojamientoPorId(Integer.parseInt(alojamientoId));
+
+            if (usuario == null || alojamiento == null) {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Usuario o alojamiento no encontrado\"}").build();
+            }
+
+            usuario.likeAlojamiento(alojamiento);
+            Session session = SessionFactoryManager.getSessionFactory().openSession();
+            session.update(usuario);
 
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");

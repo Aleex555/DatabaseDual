@@ -8,6 +8,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -37,15 +40,14 @@ public class Usuario {
         this.contrasena = contrasena;
     }
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Like> likes = new HashSet<>();
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(name = "Like", joinColumns = { @JoinColumn(name = "userID") }, inverseJoinColumns = {
+            @JoinColumn(name = "alojamientoID") })
+    private Set<Alojamiento> alojamientosLiked = new HashSet<>();
 
-    public Set<Like> getLikes() {
-        return likes;
-    }
-
-    public void setLikes(Set<Like> likes) {
-        this.likes = likes;
+    public void likeAlojamiento(Alojamiento alojamiento) {
+        this.alojamientosLiked.add(alojamiento);
+        alojamiento.getUsuariosLikes().add(this);
     }
 
     public Long getUserID() {

@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -53,15 +54,15 @@ public class Alojamiento {
     public Alojamiento() {
     }
 
-    @OneToMany(mappedBy = "alojamiento", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Like> likes = new HashSet<>();
+    @ManyToMany(mappedBy = "alojamientosLiked")
+    private Set<Usuario> usuariosLikes = new HashSet<>();
 
-    public Set<Like> getLikes() {
-        return likes;
+    public Set<Usuario> getUsuariosLikes() {
+        return usuariosLikes;
     }
 
-    public void setLikes(Set<Like> likes) {
-        this.likes = likes;
+    public void setUsuariosLikes(Set<Usuario> usuariosLikes) {
+        this.usuariosLikes = usuariosLikes;
     }
 
     public Long getAlojamientoID() {
