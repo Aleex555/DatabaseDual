@@ -51,6 +51,13 @@ public class Usuario {
         alojamiento.getUsuariosLikes().add(this);
     }
 
+    public void unlikeAlojamiento(Alojamiento alojamiento) {
+        if (this.alojamientosLiked.contains(alojamiento)) {
+            this.alojamientosLiked.remove(alojamiento);
+            alojamiento.getUsuariosLikes().remove(this);
+        }
+    }
+
     public Long getUserID() {
         return userID;
     }

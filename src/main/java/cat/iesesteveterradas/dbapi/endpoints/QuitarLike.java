@@ -1,32 +1,23 @@
 package cat.iesesteveterradas.dbapi.endpoints;
 
-import java.text.SimpleDateFormat;
-import java.util.Map;
-
 import org.hibernate.Session;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cat.iesesteveterradas.dbapi.persistencia.Alojamiento;
 import cat.iesesteveterradas.dbapi.persistencia.AlojamientoDao;
-
-import cat.iesesteveterradas.dbapi.persistencia.Reserva;
-import cat.iesesteveterradas.dbapi.persistencia.ReservaDao;
 import cat.iesesteveterradas.dbapi.persistencia.SessionFactoryManager;
 import cat.iesesteveterradas.dbapi.persistencia.Usuario;
 import cat.iesesteveterradas.dbapi.persistencia.UsuarisDao;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-@Path("/anadir/like")
-public class Likes {
-    private static final Logger logger = LoggerFactory.getLogger(Likes.class);
+public class QuitarLike {
+    private static final Logger logger = LoggerFactory.getLogger(QuitarLike.class);
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -54,11 +45,9 @@ public class Likes {
                         .entity("{\"status\":\"ERROR\",\"message\":\"Usuario o alojamiento no encontrado\"}").build();
             }
 
-            usuario.likeAlojamiento(alojamiento);
             Session session = SessionFactoryManager.getSessionFactory().openSession();
-            session.update(usuario);
-
-            alojamiento.incrementLikes();
+            usuario.unlikeAlojamiento(alojamiento);
+            alojamiento.decrementLikes();
             session.update(alojamiento);
 
             JSONObject jsonResponse = new JSONObject();
