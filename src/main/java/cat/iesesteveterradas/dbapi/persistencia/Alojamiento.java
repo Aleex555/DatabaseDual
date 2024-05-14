@@ -40,7 +40,7 @@ public class Alojamiento {
     @OneToMany(mappedBy = "alojamiento", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Reserva> reservas = new HashSet<>();
 
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "foto_alojamiento", joinColumns = @JoinColumn(name = "alojamientoID"))
     @Column(name = "urlFoto")
     private Set<String> urlFotos = new HashSet<>();
