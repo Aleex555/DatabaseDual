@@ -4,6 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -28,7 +31,6 @@ public class Alojamiento {
     private int capacidad;
     private String reglas;
     private double precioPorNoche;
-    private String urlFoto;
     private int totalLikes;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -38,15 +40,20 @@ public class Alojamiento {
     @OneToMany(mappedBy = "alojamiento", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Reserva> reservas = new HashSet<>();
 
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "foto_alojamiento", joinColumns = @JoinColumn(name = "alojamientoID"))
+    @Column(name = "urlFoto")
+    private Set<String> urlFotos = new HashSet<>();
+
     public Alojamiento(String nombre, String descripcion, String direccion, int capacidad, String reglas,
-            double precioPorNoche, String urlFoto, int totalLikes, Propietario propietario) {
+            double precioPorNoche, Set<String> urlFotos, int totalLikes, Propietario propietario) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.direccion = direccion;
         this.capacidad = capacidad;
         this.reglas = reglas;
         this.precioPorNoche = precioPorNoche;
-        this.urlFoto = urlFoto;
+        this.urlFotos = urlFotos;
         this.totalLikes = totalLikes;
         this.propietario = propietario;
     }
@@ -137,14 +144,12 @@ public class Alojamiento {
         this.precioPorNoche = precioPorNoche;
     }
 
-    // Getter para urlFoto
-    public String getUrlFoto() {
-        return urlFoto;
+    public Set<String> getUrlFotos() {
+        return urlFotos;
     }
 
-    // Setter para urlFoto
-    public void setUrlFoto(String urlFoto) {
-        this.urlFoto = urlFoto;
+    public void setUrlFotos(Set<String> urlFotos) {
+        this.urlFotos = urlFotos;
     }
 
     public Propietario getPropietario() {

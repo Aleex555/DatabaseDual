@@ -1,6 +1,7 @@
 package cat.iesesteveterradas.dbapi.persistencia;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.hibernate.Session;
@@ -13,23 +14,23 @@ public class AlojamientoDao {
     private static final Logger logger = LoggerFactory.getLogger(AlojamientoDao.class);
 
     public static Alojamiento crearAlojamiento(String nombre, String descripcion, String direccion, int capacidad,
-            String reglas, double precioPorNoche, String urlFoto, int likes, Propietario propietario) {
+            String reglas, double precioPorNoche, Set<String> urlFotos, int likes, Propietario propietario) {
         Session session = SessionFactoryManager.getSessionFactory().openSession();
         Transaction tx = null;
         Alojamiento alojamiento = null;
 
         try {
             tx = session.beginTransaction();
-            alojamiento = new Alojamiento(nombre, descripcion, direccion, capacidad, reglas, precioPorNoche, urlFoto,
+            alojamiento = new Alojamiento(nombre, descripcion, direccion, capacidad, reglas, precioPorNoche, urlFotos,
                     likes, propietario);
             session.save(alojamiento);
             tx.commit();
-            logger.info("Nuevo alojamiento creado con el nickname: {}", nombre);
+            logger.info("Nuevo alojamiento creado con el nombre: {}", nombre);
         } catch (Exception e) {
             if (tx != null) {
                 tx.rollback();
             }
-            logger.error("Error al crear el usuario", e);
+            logger.error("Error al crear el alojamiento", e);
         } finally {
             session.close();
         }
@@ -110,7 +111,7 @@ public class AlojamientoDao {
 
     @SuppressWarnings("deprecation")
     public static boolean actualizarAlojamiento(int alojamientoId, String descripcion, String nombre, String direccion,
-            String capacidad, String reglas, String precioPorNoche, String urlFoto) {
+            String capacidad, String reglas, String precioPorNoche, Set<String> urlFotos) {
         Session session = SessionFactoryManager.getSessionFactory().openSession();
         Transaction tx = null;
         try {
@@ -123,7 +124,7 @@ public class AlojamientoDao {
                 alojamiento.setCapacidad(Integer.parseInt(capacidad));
                 alojamiento.setReglas(reglas);
                 alojamiento.setPrecioPorNoche(Double.parseDouble(precioPorNoche));
-                alojamiento.setUrlFoto(urlFoto);
+                alojamiento.setUrlFotos(urlFotos);
                 session.update(alojamiento);
                 tx.commit();
                 logger.info("Alojamiento actualizado con éxito: {}", alojamientoId);

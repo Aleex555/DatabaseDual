@@ -34,15 +34,12 @@ public class InformacionAndroid {
                 alojamientoJson.put("capacidad", alojamiento.getCapacidad());
                 alojamientoJson.put("reglas", alojamiento.getReglas());
                 alojamientoJson.put("precioPorNoche", alojamiento.getPrecioPorNoche());
-                alojamientoJson.put("urlFoto", alojamiento.getUrlFoto());
+                alojamientoJson.put("urlFoto", alojamiento.getUrlFotos());
                 alojamientoJson.put("alojamientoID", alojamiento.getAlojamientoID());
+                alojamientoJson.put("likes", alojamiento.getTotalLikes());
 
                 if (alojamiento.getPropietario() != null) {
-                    alojamientoJson.put("nombrePropietario", alojamiento.getPropietario().getNombre()); // Asegúrate de
-                                                                                                        // que
-                                                                                                        // getNombre()
-                                                                                                        // existe en
-                                                                                                        // Propietario
+                    alojamientoJson.put("nombrePropietario", alojamiento.getPropietario().getNombre());
                 } else {
                     alojamientoJson.put("nombrePropietario", "No disponible");
                 }

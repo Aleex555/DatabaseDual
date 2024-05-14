@@ -1,5 +1,8 @@
 package cat.iesesteveterradas.dbapi.endpoints;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -30,7 +33,7 @@ public class MeterAlojamiento {
             String descripcion = input.optString("descripcion", null);
             String nombre = input.optString("nombre", null);
             String reglas = input.optString("reglas", null);
-            String urlFoto = input.optString("url", null);
+            JSONArray urlFotosJson = input.optJSONArray("url");
             String direccion = input.optString("direccion", null);
 
             if (capacidad == null || capacidad.trim().isEmpty()) {
@@ -58,13 +61,19 @@ public class MeterAlojamiento {
                         .entity("{\"status\":\"ERROR\",\"message\":\"reglas requerido\"}").build();
             }
 
-            if (urlFoto == null || urlFoto.trim().isEmpty()) {
+            if (urlFotosJson == null) {
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("{\"status\":\"ERROR\",\"message\":\"urlFoto requerido\"}").build();
             }
 
+            // Convertir JSONArray a Set<String>
+            Set<String> urlFotos = new HashSet<>();
+            for (int i = 0; i < urlFotosJson.length(); i++) {
+                urlFotos.add(urlFotosJson.getString(i));
+            }
+
             Alojamiento alojamiento = AlojamientoDao.crearAlojamiento(nombre, descripcion, direccion,
-                    Integer.parseInt(capacidad), reglas, Double.parseDouble(precio), urlFoto, 0,
+                    Integer.parseInt(capacidad), reglas, Double.parseDouble(precio), urlFotos, 0,
                     PropietarioDao.encontrarPropietarioPorID(Integer.parseInt(idpropietario)));
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");

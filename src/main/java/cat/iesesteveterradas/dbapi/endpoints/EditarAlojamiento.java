@@ -1,5 +1,9 @@
 package cat.iesesteveterradas.dbapi.endpoints;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +33,7 @@ public class EditarAlojamiento {
             String capacidad = input.optString("capacidad", null);
             String reglas = input.optString("reglas", null);
             String precioPorNoche = input.optString("precioPorNoche", null);
-            String urlFoto = input.optString("url", null);
+            JSONArray urlFotosJson = input.optJSONArray("url");
 
             if (alojamientoID == null || alojamientoID.trim().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST)
@@ -59,13 +63,19 @@ public class EditarAlojamiento {
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("{\"status\":\"ERROR\",\"message\":\"Precio por noche requerido\"}").build();
             }
-            if (urlFoto == null || urlFoto.trim().isEmpty()) {
+            if (urlFotosJson == null) {
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("{\"status\":\"ERROR\",\"message\":\"URL de foto requerida\"}").build();
             }
 
+            // Convertir JSONArray a Set<String>
+            Set<String> urlFotos = new HashSet<>();
+            for (int i = 0; i < urlFotosJson.length(); i++) {
+                urlFotos.add(urlFotosJson.getString(i));
+            }
+
             AlojamientoDao.actualizarAlojamiento(Integer.parseInt(alojamientoID), descripcion, nombre, direccion,
-                    capacidad, reglas, precioPorNoche, urlFoto);
+                    capacidad, reglas, precioPorNoche, urlFotos);
 
             Alojamiento alojamiento = AlojamientoDao.encontrarAlojamientoPorId(Integer.parseInt(alojamientoID));
 
@@ -76,7 +86,7 @@ public class EditarAlojamiento {
             alojamientoJson.put("capacidad", alojamiento.getCapacidad());
             alojamientoJson.put("reglas", alojamiento.getReglas());
             alojamientoJson.put("precioPorNoche", alojamiento.getPrecioPorNoche());
-            alojamientoJson.put("urlFoto", alojamiento.getUrlFoto());
+            alojamientoJson.put("urlFoto", alojamiento.getUrlFotos());
             alojamientoJson.put("alojamientoID", alojamiento.getAlojamientoID());
             if (alojamiento.getPropietario() != null) {
                 alojamientoJson.put("nombrePropietario", alojamiento.getPropietario().getNombre());

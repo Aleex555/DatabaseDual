@@ -38,7 +38,7 @@ public class PedirUnAlojamiento {
             alojamientoJson.put("capacidad", alojamiento.getCapacidad());
             alojamientoJson.put("reglas", alojamiento.getReglas());
             alojamientoJson.put("precioPorNoche", alojamiento.getPrecioPorNoche());
-            alojamientoJson.put("urlFoto", alojamiento.getUrlFoto());
+            alojamientoJson.put("urlFoto", alojamiento.getUrlFotos());
             alojamientoJson.put("alojamientoID", alojamiento.getAlojamientoID());
             alojamientoJson.put("likes", alojamiento.getTotalLikes());
             if (alojamiento.getPropietario() != null) {
