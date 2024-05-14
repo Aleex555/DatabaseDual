@@ -1,10 +1,5 @@
 package cat.iesesteveterradas.dbapi.endpoints;
 
-import java.text.SimpleDateFormat;
-import java.util.Map;
-
-import org.hibernate.Session;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +7,6 @@ import org.slf4j.LoggerFactory;
 import cat.iesesteveterradas.dbapi.persistencia.Alojamiento;
 import cat.iesesteveterradas.dbapi.persistencia.AlojamientoDao;
 
-import cat.iesesteveterradas.dbapi.persistencia.Reserva;
-import cat.iesesteveterradas.dbapi.persistencia.ReservaDao;
-import cat.iesesteveterradas.dbapi.persistencia.SessionFactoryManager;
 import cat.iesesteveterradas.dbapi.persistencia.Usuario;
 import cat.iesesteveterradas.dbapi.persistencia.UsuarisDao;
 import jakarta.ws.rs.Consumes;
@@ -31,7 +23,7 @@ public class Likes {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response likes(String jsonInput) {
+    public Response anadirlike(String jsonInput) {
         try {
             JSONObject input = new JSONObject(jsonInput);
             String alojamientoId = input.optString("alojamientoID");
@@ -55,6 +47,7 @@ public class Likes {
             }
 
             AlojamientoDao.actualizarLikesAlojamiento(Integer.parseInt(alojamientoId), 1);
+            UsuarisDao.likeAlojamiento(Integer.parseInt(usuarioId), Integer.parseInt(alojamientoId));
 
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");

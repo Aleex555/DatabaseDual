@@ -1,6 +1,8 @@
 package cat.iesesteveterradas.dbapi.endpoints;
 
 import java.util.List;
+import java.util.Set;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -8,6 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import cat.iesesteveterradas.dbapi.persistencia.Alojamiento;
 import cat.iesesteveterradas.dbapi.persistencia.AlojamientoDao;
+import cat.iesesteveterradas.dbapi.persistencia.Usuario;
+import cat.iesesteveterradas.dbapi.persistencia.UsuarisDao;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -20,9 +24,13 @@ public class InformacionAndroid {
     @Produces(MediaType.APPLICATION_JSON)
     public Response informacionAndroid(
             @QueryParam("page") @DefaultValue("1") int page,
-            @QueryParam("size") @DefaultValue("10") int size) {
+            @QueryParam("size") @DefaultValue("10") int size,
+            @QueryParam("usuarioid") int usuarioID) {
 
         try {
+
+            Set<Alojamiento> likes = UsuarisDao.obtenerLikesDeUsuario(usuarioID);
+
             List<Alojamiento> alojamientos = AlojamientoDao.encontrarAlojamientosPaginados(page, size);
             JSONArray alojamientosJsonArray = new JSONArray();
             for (Alojamiento alojamiento : alojamientos) {
@@ -35,8 +43,11 @@ public class InformacionAndroid {
                 alojamientoJson.put("precioPorNoche", alojamiento.getPrecioPorNoche());
                 alojamientoJson.put("urlFoto", alojamiento.getUrlFotos());
                 alojamientoJson.put("alojamientoID", alojamiento.getAlojamientoID());
-                alojamientoJson.put("likes", alojamiento.getTotalLikes());
-
+                if (likes.contains(alojamiento)) {
+                    alojamientoJson.put("likes", "Sí");
+                } else {
+                    alojamientoJson.put("likes", "No");
+                }
                 if (alojamiento.getPropietario() != null) {
                     alojamientoJson.put("nombrePropietario", alojamiento.getPropietario().getNombre());
                 } else {

@@ -1,5 +1,8 @@
 package cat.iesesteveterradas.dbapi.persistencia;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -116,6 +119,67 @@ public class UsuarisDao {
         } finally {
             session.close();
         }
+    }
+
+    public static void likeAlojamiento(int userId, int alojamientoId) {
+        Session session = SessionFactoryManager.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Usuario usuario = session.get(Usuario.class, userId);
+            Alojamiento alojamiento = session.get(Alojamiento.class, alojamientoId);
+            if (usuario != null && alojamiento != null) {
+                usuario.likeAlojamiento(alojamiento);
+                session.saveOrUpdate(usuario);
+                session.saveOrUpdate(alojamiento);
+                tx.commit();
+            }
+        } catch (Exception e) {
+            if (tx != null)
+                tx.rollback();
+            logger.error("Error al dar like al alojamiento con ID: {} por el usuario ID: {}", alojamientoId, userId, e);
+        } finally {
+            session.close();
+        }
+    }
+
+    public static void unlikeAlojamiento(int userId, int alojamientoId) {
+        Session session = SessionFactoryManager.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Usuario usuario = session.get(Usuario.class, userId);
+            Alojamiento alojamiento = session.get(Alojamiento.class, alojamientoId);
+            if (usuario != null && alojamiento != null && usuario.getAlojamientosLiked().contains(alojamiento)) {
+                usuario.unlikeAlojamiento(alojamiento);
+                session.saveOrUpdate(usuario);
+                session.saveOrUpdate(alojamiento);
+                tx.commit();
+            }
+        } catch (Exception e) {
+            if (tx != null)
+                tx.rollback();
+            logger.error("Error al quitar like del alojamiento con ID: {} por el usuario ID: {}", alojamientoId, userId,
+                    e);
+        } finally {
+            session.close();
+        }
+    }
+
+    public static Set<Alojamiento> obtenerLikesDeUsuario(int userId) {
+        Session session = SessionFactoryManager.getSessionFactory().openSession();
+        Set<Alojamiento> alojamientosLiked = new HashSet<>();
+        try {
+            Usuario usuario = session.get(Usuario.class, userId);
+            if (usuario != null) {
+                alojamientosLiked = usuario.getAlojamientosLiked();
+            }
+        } catch (Exception e) {
+            logger.error("Error al obtener los alojamientos liked por el usuario con ID: {}", userId, e);
+        } finally {
+            session.close();
+        }
+        return alojamientosLiked;
     }
 
 }

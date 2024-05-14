@@ -5,6 +5,7 @@ import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -113,5 +114,10 @@ public class Usuario {
 
     public void setReservas(Set<Reserva> reservas) {
         this.reservas = reservas;
+    }
+
+    public Set<Alojamiento> getAlojamientosLiked() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getAlojamientosLiked'");
     }
 }
