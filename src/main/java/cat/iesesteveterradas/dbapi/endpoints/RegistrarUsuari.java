@@ -5,7 +5,9 @@ import java.util.Random;
 import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
 
+import cat.iesesteveterradas.dbapi.persistencia.Propietario;
 import cat.iesesteveterradas.dbapi.persistencia.PropietarioDao;
+import cat.iesesteveterradas.dbapi.persistencia.Usuario;
 import cat.iesesteveterradas.dbapi.persistencia.UsuarisDao;
 import org.slf4j.Logger;
 import jakarta.ws.rs.*;
@@ -15,6 +17,7 @@ import jakarta.ws.rs.core.Response;
 @Path("/usuari/registrar")
 public class RegistrarUsuari {
     private static final Logger logger = LoggerFactory.getLogger(RegistrarUsuari.class);
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -26,41 +29,53 @@ public class RegistrarUsuari {
             String email = input.optString("email", null);
             String contrasena = input.optString("contraseña", null);
             String tipo = input.optString("tipo", null);
-            
-
 
             // Validación para 'nombre'
             if (nombre == null || nombre.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Nombre requerido\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Nombre requerido\"}").build();
             }
 
             // Validación para 'telefon'
             if (telefono == null) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Telefono requerido\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Telefono requerido\"}").build();
             }
 
             // Validación para 'email'
             if (email == null || email.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Email requerido\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Email requerido\"}").build();
             }
 
             if (contrasena == null || contrasena.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Contraseña requerida \"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Contraseña requerida \"}").build();
             }
             if (tipo == null || tipo.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Contraseña requerida \"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Tipo requerido \"}").build();
             }
 
-            
-            //System.out.println(tipo);
+            if (tipo.equals("propietario")) {
+                Propietario propietario = PropietarioDao.encontrarPropietarioPorEmailYContrasena(email, contrasena);
+                if (propietario == null) {
+                    PropietarioDao.creaPropietario(nombre, email, telefono, contrasena);
+                } else {
+                    return Response.status(Response.Status.BAD_REQUEST)
+                            .entity("{\"status\":\"ERROR\",\"message\":\"El gmail ya existe.\"}").build();
+                }
+            } else {
+                Usuario usuario = UsuarisDao.encontrarUsuarioPorEmailYContrasena(email, contrasena);
+                if (usuario == null) {
+                    UsuarisDao.creaUsuario(nombre, email, telefono, contrasena);
+                } else {
+                    return Response.status(Response.Status.BAD_REQUEST)
+                            .entity("{\"status\":\"ERROR\",\"message\":\"El gmail ya existe.\"}").build();
+                }
 
-            if(tipo.equals("propietario") ){
-                PropietarioDao.creaPropietario(nombre, email, telefono, contrasena);
-            }else{
-                UsuarisDao.creaUsuario(nombre,email, telefono,contrasena);
             }
-            
-            
+
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");
             jsonResponse.put("message", "Usuario creado correctamente");
@@ -78,7 +93,8 @@ public class RegistrarUsuari {
             return Response.ok(prettyJsonResponse).build();
         } catch (Exception e) {
             e.printStackTrace();
-            return Response.serverError().entity("{\"status\":\"ERROR\",\"message\":\"Error en afegir el usuari\"}"+e).build();
+            return Response.serverError().entity("{\"status\":\"ERROR\",\"message\":\"Error en afegir el usuari\"}" + e)
+                    .build();
         }
     }
 }
