@@ -117,7 +117,6 @@ public class Usuario {
     }
 
     public Set<Alojamiento> getAlojamientosLiked() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAlojamientosLiked'");
+        return alojamientosLiked;
     }
 }
