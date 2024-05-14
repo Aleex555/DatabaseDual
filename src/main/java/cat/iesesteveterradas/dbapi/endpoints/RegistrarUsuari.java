@@ -58,7 +58,7 @@ public class RegistrarUsuari {
             }
 
             if (tipo.equals("propietario")) {
-                Propietario propietario = PropietarioDao.encontrarPropietarioPorEmailYContrasena(email, contrasena);
+                Propietario propietario = PropietarioDao.encontrarPropietarioPorEmail(email);
                 if (propietario == null) {
                     PropietarioDao.creaPropietario(nombre, email, telefono, contrasena);
                 } else {
@@ -66,7 +66,7 @@ public class RegistrarUsuari {
                             .entity("{\"status\":\"ERROR\",\"message\":\"El gmail ya existe.\"}").build();
                 }
             } else {
-                Usuario usuario = UsuarisDao.encontrarUsuarioPorEmailYContrasena(email, contrasena);
+                Usuario usuario = UsuarisDao.encontrarUsuarioPorEmail(email);
                 if (usuario == null) {
                     UsuarisDao.creaUsuario(nombre, email, telefono, contrasena);
                 } else {

@@ -18,7 +18,7 @@ public class UsuarisDao {
 
         try {
             tx = session.beginTransaction();
-            usuario = new Usuario(nombre, email, telefono,hashedPassword);
+            usuario = new Usuario(nombre, email, telefono, hashedPassword);
             session.save(usuario);
             tx.commit();
             logger.info("Nuevo usuario creado con el nickname: {}", nombre);
@@ -33,14 +33,31 @@ public class UsuarisDao {
         return usuario;
     }
 
-
     public static Usuario encontrarUsuarioPorEmailYContrasena(String email, String contrasena) {
         Usuario usuario = null;
         String hashedPassword = DigestUtils.sha256Hex(contrasena);
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
-            usuario = session.createQuery("FROM Usuario WHERE email = :email AND contrasena = :contrasena", Usuario.class)
+            usuario = session
+                    .createQuery("FROM Usuario WHERE email = :email AND contrasena = :contrasena", Usuario.class)
                     .setParameter("email", email)
                     .setParameter("contrasena", hashedPassword)
+                    .uniqueResult();
+            if (usuario != null) {
+                logger.info("Usuario encontrado con el email: {}", email);
+            } else {
+                logger.info("No se encontró ningún usuario con el email: {} y contraseña proporcionada.", email);
+            }
+        } catch (Exception e) {
+            logger.error("Error al buscar el usuario con email: {} y contraseña proporcionada.", email, e);
+        }
+        return usuario;
+    }
+
+    public static Usuario encontrarUsuarioPorEmail(String email) {
+        Usuario usuario = null;
+        try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
+            usuario = session.createQuery("FROM Usuario WHERE email = :email", Usuario.class)
+                    .setParameter("email", email)
                     .uniqueResult();
             if (usuario != null) {
                 logger.info("Usuario encontrado con el email: {}", email);
@@ -57,8 +74,8 @@ public class UsuarisDao {
         Usuario usuario = null;
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
             usuario = session.createQuery("FROM Usuario WHERE userID = :userID", Usuario.class)
-                             .setParameter("userID", userID)
-                             .uniqueResult();
+                    .setParameter("userID", userID)
+                    .uniqueResult();
             if (usuario != null) {
                 logger.info("Usuario encontrado con el userID: {}", userID);
             } else {
@@ -71,7 +88,8 @@ public class UsuarisDao {
     }
 
     @SuppressWarnings("deprecation")
-    public static boolean actualizarUsuario(String userID, String nombre, String email, String telefono, String urlFotoPerfil) {
+    public static boolean actualizarUsuario(String userID, String nombre, String email, String telefono,
+            String urlFotoPerfil) {
         Session session = SessionFactoryManager.getSessionFactory().openSession();
         Transaction tx = null;
         try {
@@ -91,14 +109,13 @@ public class UsuarisDao {
                 return false;
             }
         } catch (Exception e) {
-            if (tx != null) tx.rollback();
+            if (tx != null)
+                tx.rollback();
             logger.error("Error al actualizar el usuario con userID: {}", userID, e);
             return false;
         } finally {
             session.close();
         }
     }
-    
-    
-    
+
 }
