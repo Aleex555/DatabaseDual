@@ -12,10 +12,10 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-
 @Path("/editar/alojamiento")
 public class EditarAlojamiento {
     private static final Logger logger = LoggerFactory.getLogger(PedirUnAlojamiento.class);
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response informacionFlutter(String jsonInput) {
@@ -31,40 +31,44 @@ public class EditarAlojamiento {
             String precioPorNoche = input.optString("precioPorNoche", null);
             String urlFoto = input.optString("url", null);
 
-
             if (alojamientoID == null || alojamientoID.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Alojamiento ID requerido\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Alojamiento ID requerido\"}").build();
             }
             if (descripcion == null || descripcion.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Descripción requerida\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Descripción requerida\"}").build();
             }
             if (nombre == null || nombre.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Nombre requerido\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Nombre requerido\"}").build();
             }
             if (direccion == null || direccion.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Dirección requerida\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Dirección requerida\"}").build();
             }
             if (capacidad == null || capacidad.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Capacidad requerida\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Capacidad requerida\"}").build();
             }
             if (reglas == null || reglas.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Reglas requeridas\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Reglas requeridas\"}").build();
             }
             if (precioPorNoche == null || precioPorNoche.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Precio por noche requerido\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Precio por noche requerido\"}").build();
             }
             if (urlFoto == null || urlFoto.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"URL de foto requerida\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"URL de foto requerida\"}").build();
             }
 
-            
-            
-            
-            
-            AlojamientoDao.actualizarAlojamiento(Integer.parseInt(alojamientoID), descripcion, nombre, direccion, capacidad, reglas, precioPorNoche, urlFoto);
+            AlojamientoDao.actualizarAlojamiento(Integer.parseInt(alojamientoID), descripcion, nombre, direccion,
+                    capacidad, reglas, precioPorNoche, urlFoto);
 
             Alojamiento alojamiento = AlojamientoDao.encontrarAlojamientoPorId(Integer.parseInt(alojamientoID));
-            
+
             JSONObject alojamientoJson = new JSONObject();
             alojamientoJson.put("nombre", alojamiento.getNombre());
             alojamientoJson.put("descripcion", alojamiento.getDescripcion());
@@ -79,13 +83,13 @@ public class EditarAlojamiento {
             } else {
                 alojamientoJson.put("nombrePropietario", "No disponible");
             }
-            
+
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");
             jsonResponse.put("message", "Datos de alojamientos obtenidos correctamente.");
             jsonResponse.put("data", alojamientoJson);
 
-            return Response.ok(jsonResponse.toString(4)).build(); 
+            return Response.ok(jsonResponse.toString(4)).build();
         } catch (Exception e) {
             logger.error("Error al obtener la información de los alojamientos", e);
             JSONObject errorResponse = new JSONObject();

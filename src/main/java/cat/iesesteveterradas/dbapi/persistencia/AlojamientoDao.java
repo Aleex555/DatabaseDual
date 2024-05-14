@@ -12,14 +12,16 @@ import org.slf4j.LoggerFactory;
 public class AlojamientoDao {
     private static final Logger logger = LoggerFactory.getLogger(AlojamientoDao.class);
 
-    public static Alojamiento crearAlojamiento(String nombre, String descripcion, String direccion, int capacidad, String reglas, double precioPorNoche, String urlFoto, int puntuaje, Propietario propietario) {
+    public static Alojamiento crearAlojamiento(String nombre, String descripcion, String direccion, int capacidad,
+            String reglas, double precioPorNoche, String urlFoto, int puntuaje, Propietario propietario) {
         Session session = SessionFactoryManager.getSessionFactory().openSession();
         Transaction tx = null;
         Alojamiento alojamiento = null;
 
         try {
             tx = session.beginTransaction();
-            alojamiento = new Alojamiento(nombre, descripcion, direccion,capacidad,reglas,precioPorNoche,urlFoto,puntuaje,propietario);
+            alojamiento = new Alojamiento(nombre, descripcion, direccion, capacidad, reglas, precioPorNoche, urlFoto,
+                    puntuaje, propietario);
             session.save(alojamiento);
             tx.commit();
             logger.info("Nuevo alojamiento creado con el nickname: {}", nombre);
@@ -34,11 +36,13 @@ public class AlojamientoDao {
         return alojamiento;
     }
 
-    public static List<Alojamiento> encontrarAlojamientosPorPropietarioPaginados(long propietarioID, int page, int size) {
+    public static List<Alojamiento> encontrarAlojamientosPorPropietarioPaginados(long propietarioID, int page,
+            int size) {
         List<Alojamiento> alojamientos = null;
 
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
-            Query<Alojamiento> query = session.createQuery("FROM Alojamiento a WHERE a.propietario.propietarioID = :propietarioID", Alojamiento.class);
+            Query<Alojamiento> query = session.createQuery(
+                    "FROM Alojamiento a WHERE a.propietario.propietarioID = :propietarioID", Alojamiento.class);
             query.setParameter("propietarioID", propietarioID);
 
             // Configurando la paginación
@@ -47,21 +51,27 @@ public class AlojamientoDao {
 
             alojamientos = query.list();
             if (!alojamientos.isEmpty()) {
-                logger.info("Se encontraron {} alojamientos para el propietario con ID {} en la página {} con tamaño {}", alojamientos.size(), propietarioID, page, size);
+                logger.info(
+                        "Se encontraron {} alojamientos para el propietario con ID {} en la página {} con tamaño {}",
+                        alojamientos.size(), propietarioID, page, size);
             } else {
-                logger.info("No se encontraron alojamientos para el propietario con ID {} en la página {} con tamaño {}", propietarioID, page, size);
+                logger.info(
+                        "No se encontraron alojamientos para el propietario con ID {} en la página {} con tamaño {}",
+                        propietarioID, page, size);
             }
         } catch (Exception e) {
-            logger.error("Error al buscar alojamientos paginados para el propietario con ID {} en la página {} y tamaño {}", propietarioID, page, size, e);
+            logger.error(
+                    "Error al buscar alojamientos paginados para el propietario con ID {} en la página {} y tamaño {}",
+                    propietarioID, page, size, e);
         }
         return alojamientos;
     }
 
-    public static List<Alojamiento> encontrarAlojamientosPaginados(int page, int size) {
+    public static List<Alojamiento> encontrarAlojamientosPaginadosAleatorios(int page, int size) {
         List<Alojamiento> alojamientos = null;
 
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
-            Query<Alojamiento> query = session.createQuery("FROM Alojamiento", Alojamiento.class);
+            Query<Alojamiento> query = session.createQuery("FROM Alojamiento ORDER BY RAND()", Alojamiento.class);
 
             // Configurando la paginación
             query.setFirstResult((page - 1) * size);
@@ -69,12 +79,14 @@ public class AlojamientoDao {
 
             alojamientos = query.list();
             if (!alojamientos.isEmpty()) {
-                logger.info("Se encontraron {} alojamientos en la página {} con tamaño {}", alojamientos.size(), page, size);
+                logger.info("Se encontraron {} alojamientos aleatorios en la página {} con tamaño {}",
+                        alojamientos.size(), page, size);
             } else {
-                logger.info("No se encontraron alojamientos en la página {} con tamaño {}", page, size);
+                logger.info("No se encontraron alojamientos aleatorios en la página {} con tamaño {}", page, size);
             }
         } catch (Exception e) {
-            logger.error("Error al buscar alojamientos paginados para la página {} y tamaño {}", page, size, e);
+            logger.error("Error al buscar alojamientos aleatorios paginados para la página {} y tamaño {}", page, size,
+                    e);
         }
         return alojamientos;
     }
@@ -97,63 +109,63 @@ public class AlojamientoDao {
     }
 
     @SuppressWarnings("deprecation")
-public static boolean actualizarAlojamiento(int alojamientoId, String descripcion, String nombre, String direccion, String capacidad, String reglas, String precioPorNoche, String urlFoto) {
-    Session session = SessionFactoryManager.getSessionFactory().openSession();
-    Transaction tx = null;
-    try {
-        tx = session.beginTransaction();
-        Alojamiento alojamiento = encontrarAlojamientoPorId(alojamientoId);
-        if (alojamiento != null) {
-            alojamiento.setDescripcion(descripcion);
-            alojamiento.setNombre(nombre);
-            alojamiento.setDireccion(direccion);
-            alojamiento.setCapacidad(Integer.parseInt(capacidad));
-            alojamiento.setReglas(reglas);
-            alojamiento.setPrecioPorNoche(Double.parseDouble(precioPorNoche));
-            alojamiento.setUrlFoto(urlFoto);
-            session.update(alojamiento);
-            tx.commit();
-            logger.info("Alojamiento actualizado con éxito: {}", alojamientoId);
-            return true;
-        } else {
-            logger.info("No se encontró el alojamiento: {}", alojamientoId);
+    public static boolean actualizarAlojamiento(int alojamientoId, String descripcion, String nombre, String direccion,
+            String capacidad, String reglas, String precioPorNoche, String urlFoto) {
+        Session session = SessionFactoryManager.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Alojamiento alojamiento = encontrarAlojamientoPorId(alojamientoId);
+            if (alojamiento != null) {
+                alojamiento.setDescripcion(descripcion);
+                alojamiento.setNombre(nombre);
+                alojamiento.setDireccion(direccion);
+                alojamiento.setCapacidad(Integer.parseInt(capacidad));
+                alojamiento.setReglas(reglas);
+                alojamiento.setPrecioPorNoche(Double.parseDouble(precioPorNoche));
+                alojamiento.setUrlFoto(urlFoto);
+                session.update(alojamiento);
+                tx.commit();
+                logger.info("Alojamiento actualizado con éxito: {}", alojamientoId);
+                return true;
+            } else {
+                logger.info("No se encontró el alojamiento: {}", alojamientoId);
+                return false;
+            }
+        } catch (Exception e) {
+            if (tx != null)
+                tx.rollback();
+            logger.error("Error al actualizar el alojamiento con ID: {}", alojamientoId, e);
             return false;
+        } finally {
+            session.close();
         }
-    } catch (Exception e) {
-        if (tx != null) tx.rollback();
-        logger.error("Error al actualizar el alojamiento con ID: {}", alojamientoId, e);
-        return false;
-    } finally {
-        session.close();
     }
-}
 
-
-public static boolean eliminarAlojamientoPorId(int alojamientoId) {
-    Session session = SessionFactoryManager.getSessionFactory().openSession();
-    Transaction tx = null;
-    try {
-        tx = session.beginTransaction();
-        Alojamiento alojamiento = session.get(Alojamiento.class, alojamientoId);
-        if (alojamiento != null) {
-            session.delete(alojamiento);  // Realiza la eliminación del objeto alojamiento
-            tx.commit();
-            logger.info("Alojamiento eliminado con éxito con ID {}", alojamientoId);
-            return true;
-        } else {
-            logger.info("No se encontró ningún alojamiento con ID {}", alojamientoId);
+    public static boolean eliminarAlojamientoPorId(int alojamientoId) {
+        Session session = SessionFactoryManager.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Alojamiento alojamiento = session.get(Alojamiento.class, alojamientoId);
+            if (alojamiento != null) {
+                session.delete(alojamiento); // Realiza la eliminación del objeto alojamiento
+                tx.commit();
+                logger.info("Alojamiento eliminado con éxito con ID {}", alojamientoId);
+                return true;
+            } else {
+                logger.info("No se encontró ningún alojamiento con ID {}", alojamientoId);
+                return false;
+            }
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            logger.error("Error al eliminar el alojamiento con ID {}", alojamientoId, e);
             return false;
+        } finally {
+            session.close();
         }
-    } catch (Exception e) {
-        if (tx != null) {
-            tx.rollback();
-        }
-        logger.error("Error al eliminar el alojamiento con ID {}", alojamientoId, e);
-        return false;
-    } finally {
-        session.close();
     }
-}
-
 
 }
