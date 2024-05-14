@@ -47,10 +47,7 @@ public class QuitarLike {
                         .entity("{\"status\":\"ERROR\",\"message\":\"Usuario o alojamiento no encontrado\"}").build();
             }
 
-            Session session = SessionFactoryManager.getSessionFactory().openSession();
-            usuario.unlikeAlojamiento(alojamiento);
-            alojamiento.decrementLikes();
-            session.update(alojamiento);
+            AlojamientoDao.actualizarLikesAlojamiento(Integer.parseInt(alojamientoId), -1);
 
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");

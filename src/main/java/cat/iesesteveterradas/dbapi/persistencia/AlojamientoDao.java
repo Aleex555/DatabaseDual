@@ -110,6 +110,35 @@ public class AlojamientoDao {
         return alojamiento;
     }
 
+    public static void actualizarLikesAlojamiento(int alojamientoId, int likesToAdd) {
+        Transaction transaction = null;
+        try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
+            // Iniciando la transacción
+            transaction = session.beginTransaction();
+
+            // Obteniendo el alojamiento por ID
+            Alojamiento alojamiento = session.get(Alojamiento.class, alojamientoId);
+            if (alojamiento != null) {
+                // Actualizando el número de likes
+                alojamiento.setTotalLikes(alojamiento.getTotalLikes() + likesToAdd);
+                session.update(alojamiento);
+
+                // Commit de la transacción
+                transaction.commit();
+                logger.info("Likes actualizados para el alojamiento con ID {}. Total likes: {}", alojamientoId,
+                        alojamiento.getTotalLikes());
+            } else {
+                logger.info("No se encontró ningún alojamiento con ID {}", alojamientoId);
+                if (transaction != null)
+                    transaction.rollback();
+            }
+        } catch (Exception e) {
+            if (transaction != null)
+                transaction.rollback();
+            logger.error("Error al actualizar los likes del alojamiento con ID {}", alojamientoId, e);
+        }
+    }
+
     @SuppressWarnings("deprecation")
     public static boolean actualizarAlojamiento(int alojamientoId, String descripcion, String nombre, String direccion,
             String capacidad, String reglas, String precioPorNoche) {

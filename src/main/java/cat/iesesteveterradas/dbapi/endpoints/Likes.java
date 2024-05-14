@@ -54,12 +54,7 @@ public class Likes {
                         .entity("{\"status\":\"ERROR\",\"message\":\"Usuario o alojamiento no encontrado\"}").build();
             }
 
-            usuario.likeAlojamiento(alojamiento);
-            Session session = SessionFactoryManager.getSessionFactory().openSession();
-            session.update(usuario);
-
-            alojamiento.incrementLikes();
-            session.update(alojamiento);
+            AlojamientoDao.actualizarLikesAlojamiento(Integer.parseInt(alojamientoId), 1);
 
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");

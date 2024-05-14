@@ -181,14 +181,4 @@ public class Alojamiento {
         this.reservas = reservas;
     }
 
-    // Métodos para actualizar los likes
-    public void incrementLikes() {
-        this.totalLikes += 1;
-    }
-
-    public void decrementLikes() {
-        if (this.totalLikes > 0) {
-            this.totalLikes -= 1;
-        }
-    }
 }
