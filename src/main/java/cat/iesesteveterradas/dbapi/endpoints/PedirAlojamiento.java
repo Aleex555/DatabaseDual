@@ -1,19 +1,20 @@
 package cat.iesesteveterradas.dbapi.endpoints;
 
-import cat.iesesteveterradas.dbapi.persistencia.AlojamientoDao;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cat.iesesteveterradas.dbapi.persistencia.Alojamiento;
-
-import jakarta.ws.rs.*;
+import cat.iesesteveterradas.dbapi.persistencia.AlojamientoDao;
+import cat.iesesteveterradas.dbapi.persistencia.UsuarisDao;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-@Path("/pedir/alojamiento")
-public class PedirUnAlojamiento {
+@Path("/alojamiento/android")
+public class PedirAlojamiento {
     private static final Logger logger = LoggerFactory.getLogger(PedirUnAlojamiento.class);
 
     @POST
@@ -22,30 +23,25 @@ public class PedirUnAlojamiento {
 
         try {
             JSONObject input = new JSONObject(jsonInput);
-            String id = input.optString("id", null);
+            String id = input.optString("usuarioID", null);
+            String alojamientoID = input.optString("alojamientoID", null);
 
             if (id == null || id.trim().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("{\"status\":\"ERROR\",\"message\":\"Id requerido\"}").build();
             }
+            if (alojamientoID == null || alojamientoID.trim().isEmpty()) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Id requerido\"}").build();
+            }
 
-            Alojamiento alojamiento = AlojamientoDao.encontrarAlojamientoPorId(Integer.parseInt(id));
-
+            Boolean existe = UsuarisDao.existeLikeUsuarioAlojamiento(id,
+                    Integer.parseInt(alojamientoID));
             JSONObject alojamientoJson = new JSONObject();
-            alojamientoJson.put("nombre", alojamiento.getNombre());
-            alojamientoJson.put("descripcion", alojamiento.getDescripcion());
-            alojamientoJson.put("direccion", alojamiento.getDireccion());
-            alojamientoJson.put("capacidad", alojamiento.getCapacidad());
-            alojamientoJson.put("reglas", alojamiento.getReglas());
-            alojamientoJson.put("precioPorNoche", alojamiento.getPrecioPorNoche());
-            alojamientoJson.put("urlFoto", alojamiento.getUrlFotos());
-            alojamientoJson.put("alojamientoID", alojamiento.getAlojamientoID());
-            alojamientoJson.put("likes", alojamiento.getTotalLikes());
-
-            if (alojamiento.getPropietario() != null) {
-                alojamientoJson.put("nombrePropietario", alojamiento.getPropietario().getNombre());
+            if (existe) {
+                alojamientoJson.put("like", "Si");
             } else {
-                alojamientoJson.put("nombrePropietario", "No disponible");
+                alojamientoJson.put("like", "No");
             }
 
             JSONObject jsonResponse = new JSONObject();

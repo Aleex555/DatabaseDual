@@ -9,6 +9,8 @@ import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mysql.cj.Query;
+
 public class UsuarisDao {
 
     private static final Logger logger = LoggerFactory.getLogger(UsuarisDao.class);
@@ -166,20 +168,27 @@ public class UsuarisDao {
         }
     }
 
-    public static Set<Alojamiento> obtenerLikesDeUsuario(int userId) {
-        Session session = SessionFactoryManager.getSessionFactory().openSession();
-        Set<Alojamiento> alojamientosLiked = new HashSet<>();
-        try {
-            Usuario usuario = session.get(Usuario.class, userId);
+    public static boolean existeLikeUsuarioAlojamiento(String userID, int alojamientoID) {
+        try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
+            Usuario usuario = session.get(Usuario.class, userID);
             if (usuario != null) {
-                alojamientosLiked = usuario.getAlojamientosLiked();
+                Set<Alojamiento> alojamientosLiked = usuario.getAlojamientosLiked();
+                for (Alojamiento alojamiento : alojamientosLiked) {
+                    if (alojamiento.getAlojamientoID() == alojamientoID) {
+                        logger.info("Existe un 'like' entre el usuario con userID: {} y el alojamientoID: {}", userID,
+                                alojamientoID);
+                        return true;
+                    }
+                }
             }
+            logger.info("No se encontró ningún 'like' entre el usuario con userID: {} y el alojamientoID: {}", userID,
+                    alojamientoID);
         } catch (Exception e) {
-            logger.error("Error al obtener los alojamientos liked por el usuario con ID: {}", userId, e);
-        } finally {
-            session.close();
+            logger.error(
+                    "Error al verificar la existencia de 'like' entre el usuario con userID: {} y el alojamientoID: {}",
+                    userID, alojamientoID, e);
         }
-        return alojamientosLiked;
+        return false; // Retorna false si no se encuentra el alojamiento o si hay algún error
     }
 
 }

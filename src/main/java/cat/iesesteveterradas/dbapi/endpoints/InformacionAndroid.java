@@ -28,9 +28,7 @@ public class InformacionAndroid {
             @QueryParam("usuarioid") int usuarioID) {
 
         try {
-            System.out.println(usuarioID);
-            Set<Alojamiento> likes = UsuarisDao.obtenerLikesDeUsuario(usuarioID);
-            System.out.println(likes);
+
             List<Alojamiento> alojamientos = AlojamientoDao.encontrarAlojamientosPaginados(page, size);
             JSONArray alojamientosJsonArray = new JSONArray();
             for (Alojamiento alojamiento : alojamientos) {
@@ -43,11 +41,6 @@ public class InformacionAndroid {
                 alojamientoJson.put("precioPorNoche", alojamiento.getPrecioPorNoche());
                 alojamientoJson.put("urlFoto", alojamiento.getUrlFotos());
                 alojamientoJson.put("alojamientoID", alojamiento.getAlojamientoID());
-                if (likes.contains(alojamiento)) {
-                    alojamientoJson.put("likes", "Sí");
-                } else {
-                    alojamientoJson.put("likes", "No");
-                }
                 if (alojamiento.getPropietario() != null) {
                     alojamientoJson.put("nombrePropietario", alojamiento.getPropietario().getNombre());
                 } else {
