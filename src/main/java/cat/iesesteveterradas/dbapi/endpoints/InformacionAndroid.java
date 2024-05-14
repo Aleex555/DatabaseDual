@@ -30,7 +30,7 @@ public class InformacionAndroid {
         try {
 
             Set<Alojamiento> likes = UsuarisDao.obtenerLikesDeUsuario(usuarioID);
-
+            System.out.println(likes);
             List<Alojamiento> alojamientos = AlojamientoDao.encontrarAlojamientosPaginados(page, size);
             JSONArray alojamientosJsonArray = new JSONArray();
             for (Alojamiento alojamiento : alojamientos) {
