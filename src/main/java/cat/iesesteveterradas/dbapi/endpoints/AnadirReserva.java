@@ -20,10 +20,9 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-
 @Path("/reservas/anadir")
-public class AñadirReserva {
-     private static final Logger logger = LoggerFactory.getLogger(InformacionReserva.class);
+public class AnadirReserva {
+    private static final Logger logger = LoggerFactory.getLogger(InformacionReserva.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @POST
@@ -39,30 +38,36 @@ public class AñadirReserva {
             String usuario = input.optString("usuarioID");
 
             if (alojamientoId == null || alojamientoId.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"ID de alojamiento requerido\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"ID de alojamiento requerido\"}").build();
             }
             if (fechafinal == null || fechafinal.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Fecha Final requerida\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Fecha Final requerida\"}").build();
             }
 
             if (fechainicio == null || fechainicio.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Fecha Inicio requerida \"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Fecha Inicio requerida \"}").build();
             }
 
             if (total == null || total.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Total requerido \"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Total requerido \"}").build();
             }
             if (usuario == null || usuario.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Id usuario requerido \"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Id usuario requerido \"}").build();
             }
-            
 
-            ReservaDao.crearReserva(UsuarisDao.encontrarUsuarioPorUserID(usuario), AlojamientoDao.encontrarAlojamientoPorId(Integer.parseInt(alojamientoId)), fechainicio, fechafinal, Double.parseDouble(total));
+            ReservaDao.crearReserva(UsuarisDao.encontrarUsuarioPorUserID(usuario),
+                    AlojamientoDao.encontrarAlojamientoPorId(Integer.parseInt(alojamientoId)), fechainicio, fechafinal,
+                    Double.parseDouble(total));
 
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");
             jsonResponse.put("message", "Información de las reservas obtenida correctamente.");
-            
+
             return Response.ok(jsonResponse.toString()).build();
         } catch (Exception e) {
             logger.error("Error al obtener la información de las reservas", e);
