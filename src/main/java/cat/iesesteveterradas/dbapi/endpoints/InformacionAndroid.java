@@ -23,8 +23,7 @@ public class InformacionAndroid {
             @QueryParam("size") @DefaultValue("10") int size) {
 
         try {
-            List<Alojamiento> alojamientos = AlojamientoDao.encontrarAlojamientosPaginadosAleatorios(page, size);
-
+            List<Alojamiento> alojamientos = AlojamientoDao.encontrarAlojamientosPaginados(page, size);
             JSONArray alojamientosJsonArray = new JSONArray();
             for (Alojamiento alojamiento : alojamientos) {
                 JSONObject alojamientoJson = new JSONObject();

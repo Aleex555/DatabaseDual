@@ -61,7 +61,7 @@ public class Alojamiento {
     public Alojamiento() {
     }
 
-    @ManyToMany(mappedBy = "alojamientosLiked")
+    @ManyToMany(mappedBy = "alojamientosLiked", fetch = FetchType.EAGER)
     private Set<Usuario> usuariosLikes = new HashSet<>();
 
     public Set<Usuario> getUsuariosLikes() {

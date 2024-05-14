@@ -69,11 +69,11 @@ public class AlojamientoDao {
         return alojamientos;
     }
 
-    public static List<Alojamiento> encontrarAlojamientosPaginadosAleatorios(int page, int size) {
+    public static List<Alojamiento> encontrarAlojamientosPaginados(int page, int size) {
         List<Alojamiento> alojamientos = null;
 
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
-            Query<Alojamiento> query = session.createQuery("FROM Alojamiento ORDER BY RAND()", Alojamiento.class);
+            Query<Alojamiento> query = session.createQuery("FROM Alojamiento", Alojamiento.class);
 
             // Configurando la paginación
             query.setFirstResult((page - 1) * size);
