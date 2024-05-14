@@ -1,29 +1,25 @@
 package cat.iesesteveterradas.dbapi.persistencia;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "usuario_alojamiento_like")
+@Table(name = "likes")
 public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "usuarioID")
     private Usuario usuario;
 
     @ManyToOne
-    @JoinColumn(name = "alojamientoID")
     private Alojamiento alojamiento;
 
-    // Constructors, getters, and setters
     public Like() {
     }
 
@@ -32,6 +28,7 @@ public class Like {
         this.alojamiento = alojamiento;
     }
 
+    // Getters y setters
     public Long getId() {
         return id;
     }
