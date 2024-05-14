@@ -1,4 +1,5 @@
 package cat.iesesteveterradas.dbapi.persistencia;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -18,7 +19,7 @@ public class PropietarioDao {
 
         try {
             tx = session.beginTransaction();
-            propietario = new Propietario(nombre, email, telefono,hashedPassword);
+            propietario = new Propietario(nombre, email, telefono, hashedPassword);
             session.save(propietario);
             tx.commit();
             logger.info("Nuevo usuario creado con el nickname: {}", nombre);
@@ -33,12 +34,13 @@ public class PropietarioDao {
         return propietario;
     }
 
-
     public static Propietario encontrarPropietarioPorEmailYContrasena(String email, String contrasena) {
         Propietario propietario = null;
         String hashedPassword = DigestUtils.sha256Hex(contrasena);
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
-            propietario = session.createQuery("FROM Propietario WHERE emailContacto = :email AND contrasena = :contrasena", Propietario.class)
+            propietario = session
+                    .createQuery("FROM Propietario WHERE emailContacto = :email AND contrasena = :contrasena",
+                            Propietario.class)
                     .setParameter("email", email)
                     .setParameter("contrasena", hashedPassword)
                     .uniqueResult();
@@ -51,6 +53,38 @@ public class PropietarioDao {
             logger.error("Error al buscar el propietario con email: {} y contraseña proporcionada.", email, e);
         }
         return propietario;
+    }
+
+    public static boolean actualizarContrasenaPropietario(String email, String nuevaContrasena) {
+        Session session = SessionFactoryManager.getSessionFactory().openSession();
+        Transaction tx = null;
+        String hashedPassword = DigestUtils.sha256Hex(nuevaContrasena);
+        try {
+            tx = session.beginTransaction();
+
+            // Obtener el propietario por email
+            Propietario propietario = encontrarPropietarioPorEmail(email);
+
+            if (propietario != null) {
+                // Establecer la nueva contraseña
+                propietario.setContrasena(hashedPassword);
+                // Guardar el cambio
+                session.update(propietario);
+                tx.commit();
+                logger.info("Contraseña actualizada con éxito para el propietario con email: {}", email);
+                return true; // Retorna verdadero si la contraseña fue actualizada
+            } else {
+                logger.info("No se encontró ningún propietario con el email: {}", email);
+                return false; // Retorna falso si no se encontró el propietario
+            }
+        } catch (Exception e) {
+            if (tx != null)
+                tx.rollback();
+            logger.error("Error al actualizar la contraseña del propietario con el email: {}", email, e);
+            return false;
+        } finally {
+            session.close();
+        }
     }
 
     public static Propietario encontrarPropietarioPorID(int propietarioID) {
@@ -73,7 +107,8 @@ public class PropietarioDao {
     public static Propietario encontrarPropietarioPorEmail(String email) {
         Propietario propietario = null;
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
-            Query<Propietario> query = session.createQuery("FROM Propietario WHERE emailContacto = :email", Propietario.class);
+            Query<Propietario> query = session.createQuery("FROM Propietario WHERE emailContacto = :email",
+                    Propietario.class);
             query.setParameter("email", email);
             propietario = query.uniqueResult();
 
@@ -87,5 +122,5 @@ public class PropietarioDao {
         }
         return propietario;
     }
-    
+
 }

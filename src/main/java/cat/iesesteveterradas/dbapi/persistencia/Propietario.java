@@ -19,7 +19,7 @@ public class Propietario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long propietarioID;
-    
+
     private String nombre;
     private String emailContacto;
     private String telefonoContacto;
@@ -28,7 +28,7 @@ public class Propietario {
     @OneToMany(mappedBy = "propietario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Alojamiento> alojamientos = new HashSet<>();
 
-    public Propietario(String nombre, String email,String telefono, String contrasena) {
+    public Propietario(String nombre, String email, String telefono, String contrasena) {
         this.nombre = nombre;
         this.emailContacto = email;
         this.telefonoContacto = telefono;
@@ -36,7 +36,7 @@ public class Propietario {
     }
 
     public Propietario() {
-        
+
     }
 
     // Getters y Setters
@@ -52,5 +52,8 @@ public class Propietario {
         return nombre;
     }
 
-    
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+
 }
