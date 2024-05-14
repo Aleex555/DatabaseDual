@@ -1,6 +1,5 @@
 package cat.iesesteveterradas.dbapi.persistencia;
 
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,7 +20,7 @@ public class Alojamiento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long alojamientoID;
-    
+
     private String nombre;
     private String descripcion;
     private String direccion;
@@ -29,17 +28,17 @@ public class Alojamiento {
     private String reglas;
     private double precioPorNoche;
     private String urlFoto;
-    private int puntuaje;
+    private int totalLikes;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "propietarioID")
     private Propietario propietario;
 
-
     @OneToMany(mappedBy = "alojamiento", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Reserva> reservas = new HashSet<>();
 
-    public Alojamiento(String nombre, String descripcion, String direccion, int capacidad, String reglas, double precioPorNoche, String urlFoto, int puntuaje, Propietario propietario) {
+    public Alojamiento(String nombre, String descripcion, String direccion, int capacidad, String reglas,
+            double precioPorNoche, String urlFoto, int totalLikes, Propietario propietario) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.direccion = direccion;
@@ -47,11 +46,22 @@ public class Alojamiento {
         this.reglas = reglas;
         this.precioPorNoche = precioPorNoche;
         this.urlFoto = urlFoto;
-        this.puntuaje = puntuaje;
+        this.totalLikes = totalLikes;
         this.propietario = propietario;
     }
 
     public Alojamiento() {
+    }
+
+    @OneToMany(mappedBy = "alojamiento", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Like> likes = new HashSet<>();
+
+    public Set<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Set<Like> likes) {
+        this.likes = likes;
     }
 
     public Long getAlojamientoID() {
@@ -97,13 +107,13 @@ public class Alojamiento {
         this.capacidad = capacidad;
     }
 
-    public int getPuntuaje() {
-        return puntuaje;
+    public int getTotalLikes() {
+        return totalLikes;
     }
 
     // Setter para capacidad
-    public void setPuntuaje(int puntuaje) {
-        this.puntuaje = puntuaje;
+    public void setTotalLikes(int totalLikes) {
+        this.totalLikes = totalLikes;
     }
 
     // Getter para reglas
@@ -163,5 +173,16 @@ public class Alojamiento {
 
     public void setReservas(Set<Reserva> reservas) {
         this.reservas = reservas;
+    }
+
+    // Métodos para actualizar los likes
+    public void incrementLikes() {
+        this.totalLikes += 1;
+    }
+
+    public void decrementLikes() {
+        if (this.totalLikes > 0) {
+            this.totalLikes -= 1;
+        }
     }
 }

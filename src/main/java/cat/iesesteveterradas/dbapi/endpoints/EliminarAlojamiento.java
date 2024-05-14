@@ -12,32 +12,28 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-
 @Path("/eliminar/alojamiento")
 public class EliminarAlojamiento {
     private static final Logger logger = LoggerFactory.getLogger(PedirUnAlojamiento.class);
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response informacionFlutter(String jsonInput) {
+    public Response eliminarAlojamiento(String jsonInput) {
 
         try {
             JSONObject input = new JSONObject(jsonInput);
             String id = input.optString("id", null);
 
-
             if (id == null || id.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Email requerido\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Email requerido\"}").build();
             }
-            
-
 
             AlojamientoDao.eliminarAlojamientoPorId(Integer.parseInt(id));
-            
-            
+
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");
             jsonResponse.put("message", "Alojamiento eliminado correctamente.");
-            
 
             return Response.ok(jsonResponse.toString(4)).build(); // 4 espacios para indentar
         } catch (Exception e) {

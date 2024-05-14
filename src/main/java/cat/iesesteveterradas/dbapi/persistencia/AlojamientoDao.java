@@ -13,7 +13,7 @@ public class AlojamientoDao {
     private static final Logger logger = LoggerFactory.getLogger(AlojamientoDao.class);
 
     public static Alojamiento crearAlojamiento(String nombre, String descripcion, String direccion, int capacidad,
-            String reglas, double precioPorNoche, String urlFoto, int puntuaje, Propietario propietario) {
+            String reglas, double precioPorNoche, String urlFoto, int likes, Propietario propietario) {
         Session session = SessionFactoryManager.getSessionFactory().openSession();
         Transaction tx = null;
         Alojamiento alojamiento = null;
@@ -21,7 +21,7 @@ public class AlojamientoDao {
         try {
             tx = session.beginTransaction();
             alojamiento = new Alojamiento(nombre, descripcion, direccion, capacidad, reglas, precioPorNoche, urlFoto,
-                    puntuaje, propietario);
+                    likes, propietario);
             session.save(alojamiento);
             tx.commit();
             logger.info("Nuevo alojamiento creado con el nickname: {}", nombre);

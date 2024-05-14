@@ -18,7 +18,7 @@ public class EditarAlojamiento {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response informacionFlutter(String jsonInput) {
+    public Response editarAlojamiento(String jsonInput) {
 
         try {
             JSONObject input = new JSONObject(jsonInput);

@@ -15,6 +15,7 @@ import jakarta.ws.rs.core.Response;
 @Path("/pedir/alojamiento")
 public class PedirUnAlojamiento {
     private static final Logger logger = LoggerFactory.getLogger(PedirUnAlojamiento.class);
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response informacionFlutter(String jsonInput) {
@@ -23,15 +24,13 @@ public class PedirUnAlojamiento {
             JSONObject input = new JSONObject(jsonInput);
             String id = input.optString("id", null);
 
-
             if (id == null || id.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Email requerido\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Id requerido\"}").build();
             }
-            
-
 
             Alojamiento alojamiento = AlojamientoDao.encontrarAlojamientoPorId(Integer.parseInt(id));
-            
+
             JSONObject alojamientoJson = new JSONObject();
             alojamientoJson.put("nombre", alojamiento.getNombre());
             alojamientoJson.put("descripcion", alojamiento.getDescripcion());
@@ -46,7 +45,7 @@ public class PedirUnAlojamiento {
             } else {
                 alojamientoJson.put("nombrePropietario", "No disponible");
             }
-            
+
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");
             jsonResponse.put("message", "Datos de alojamientos obtenidos correctamente.");

@@ -1,6 +1,5 @@
 package cat.iesesteveterradas.dbapi.persistencia;
 
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,14 +11,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-
 @Entity
 @Table(name = "usuario")
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userID;
-    
+
     private String nombre;
     private String email;
     private String contrasena;
@@ -32,11 +30,22 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String nombre, String email,String telefono, String contrasena) {
+    public Usuario(String nombre, String email, String telefono, String contrasena) {
         this.nombre = nombre;
         this.email = email;
         this.telefono = telefono;
         this.contrasena = contrasena;
+    }
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Like> likes = new HashSet<>();
+
+    public Set<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Set<Like> likes) {
+        this.likes = likes;
     }
 
     public Long getUserID() {

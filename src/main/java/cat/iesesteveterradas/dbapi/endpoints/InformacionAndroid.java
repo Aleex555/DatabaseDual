@@ -21,10 +21,9 @@ public class InformacionAndroid {
     public Response informacionAndroid(
             @QueryParam("page") @DefaultValue("1") int page,
             @QueryParam("size") @DefaultValue("10") int size) {
-        
+
         try {
-            List<Alojamiento> alojamientos = AlojamientoDao.encontrarAlojamientosPaginados(page, size);
-            
+            List<Alojamiento> alojamientos = AlojamientoDao.encontrarAlojamientosPaginadosAleatorios(page, size);
 
             JSONArray alojamientosJsonArray = new JSONArray();
             for (Alojamiento alojamiento : alojamientos) {
@@ -38,9 +37,12 @@ public class InformacionAndroid {
                 alojamientoJson.put("urlFoto", alojamiento.getUrlFoto());
                 alojamientoJson.put("alojamientoID", alojamiento.getAlojamientoID());
 
-                
                 if (alojamiento.getPropietario() != null) {
-                    alojamientoJson.put("nombrePropietario", alojamiento.getPropietario().getNombre()); // Asegúrate de que getNombre() existe en Propietario
+                    alojamientoJson.put("nombrePropietario", alojamiento.getPropietario().getNombre()); // Asegúrate de
+                                                                                                        // que
+                                                                                                        // getNombre()
+                                                                                                        // existe en
+                                                                                                        // Propietario
                 } else {
                     alojamientoJson.put("nombrePropietario", "No disponible");
                 }

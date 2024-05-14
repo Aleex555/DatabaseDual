@@ -14,10 +14,10 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-
 @Path("/meter/alojamiento")
 public class MeterAlojamiento {
     private static final Logger logger = LoggerFactory.getLogger(InformacionFlutter.class);
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response informacionFlutter(String jsonInput) {
@@ -33,33 +33,39 @@ public class MeterAlojamiento {
             String urlFoto = input.optString("url", null);
             String direccion = input.optString("direccion", null);
 
-
             if (capacidad == null || capacidad.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"capacidad requerido\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"capacidad requerido\"}").build();
             }
             if (precio == null || precio.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"precio requerido\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"precio requerido\"}").build();
             }
             if (idpropietario == null || idpropietario.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Email requerido\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Email requerido\"}").build();
             }
             if (descripcion == null || descripcion.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"descripcion requerido\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"descripcion requerido\"}").build();
             }
             if (nombre == null || nombre.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"nombre requerido\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"nombre requerido\"}").build();
             }
             if (reglas == null || reglas.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"reglas requerido\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"reglas requerido\"}").build();
             }
 
             if (urlFoto == null || urlFoto.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"urlFoto requerido\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"urlFoto requerido\"}").build();
             }
 
-
-
-            Alojamiento alojamiento = AlojamientoDao.crearAlojamiento(nombre, descripcion, direccion, Integer.parseInt(capacidad), reglas, Double.parseDouble(precio), urlFoto, 0, PropietarioDao.encontrarPropietarioPorID(Integer.parseInt(idpropietario)));
+            Alojamiento alojamiento = AlojamientoDao.crearAlojamiento(nombre, descripcion, direccion,
+                    Integer.parseInt(capacidad), reglas, Double.parseDouble(precio), urlFoto, 0,
+                    PropietarioDao.encontrarPropietarioPorID(Integer.parseInt(idpropietario)));
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");
             jsonResponse.put("message", "Alojamiento creado correctamente");
@@ -67,8 +73,7 @@ public class MeterAlojamiento {
             // Crear el objeto JSON para la parte "data"
             JSONObject userData = new JSONObject();
             userData.put("nombre", nombre);
-            userData.put("Alojamiento",alojamiento.getAlojamientoID());
-
+            userData.put("Alojamiento", alojamiento.getAlojamientoID());
 
             // Añadir el objeto "data" al JSON de respuesta
             jsonResponse.put("data", userData);

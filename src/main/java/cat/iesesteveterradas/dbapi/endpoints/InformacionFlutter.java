@@ -20,8 +20,8 @@ public class InformacionFlutter {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response informacionAndroid(String jsonInput) {
-        
+    public Response informacionFlutter(String jsonInput) {
+
         try {
             JSONObject input = new JSONObject(jsonInput);
             String email = input.optString("email", null);
@@ -29,8 +29,8 @@ public class InformacionFlutter {
             String size = input.optString("size", null);
 
             Propietario id = PropietarioDao.encontrarPropietarioPorEmail(email);
-            List<Alojamiento> alojamientos = AlojamientoDao.encontrarAlojamientosPorPropietarioPaginados(id.getPropietarioID(),Integer.parseInt(page), Integer.parseInt(size));
-            
+            List<Alojamiento> alojamientos = AlojamientoDao.encontrarAlojamientosPorPropietarioPaginados(
+                    id.getPropietarioID(), Integer.parseInt(page), Integer.parseInt(size));
 
             JSONArray alojamientosJsonArray = new JSONArray();
             for (Alojamiento alojamiento : alojamientos) {
@@ -44,9 +44,12 @@ public class InformacionFlutter {
                 alojamientoJson.put("urlFoto", alojamiento.getUrlFoto());
                 alojamientoJson.put("alojamientoID", alojamiento.getAlojamientoID());
 
-                
                 if (alojamiento.getPropietario() != null) {
-                    alojamientoJson.put("nombrePropietario", alojamiento.getPropietario().getNombre()); // Asegúrate de que getNombre() existe en Propietario
+                    alojamientoJson.put("nombrePropietario", alojamiento.getPropietario().getNombre()); // Asegúrate de
+                                                                                                        // que
+                                                                                                        // getNombre()
+                                                                                                        // existe en
+                                                                                                        // Propietario
                 } else {
                     alojamientoJson.put("nombrePropietario", "No disponible");
                 }
