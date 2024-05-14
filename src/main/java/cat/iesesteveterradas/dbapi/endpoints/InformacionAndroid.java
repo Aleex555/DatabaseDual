@@ -28,7 +28,7 @@ public class InformacionAndroid {
             @QueryParam("usuarioid") int usuarioID) {
 
         try {
-
+            System.out.println(usuarioID);
             Set<Alojamiento> likes = UsuarisDao.obtenerLikesDeUsuario(usuarioID);
             System.out.println(likes);
             List<Alojamiento> alojamientos = AlojamientoDao.encontrarAlojamientosPaginados(page, size);
