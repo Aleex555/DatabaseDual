@@ -11,13 +11,21 @@ El módulo `DBAPI` de HostelHunter es crucial para el funcionamiento integral de
 
 ### Funcionalidades principales
 
-1. **Gestión de Hostales**: Operaciones CRUD sobre la información de hostales, como ubicación, precios, disponibilidad y servicios.
+1. **Gestión de Alojamientos**:
+   - **Agregar Alojamientos**: Permite a los administradores añadir nuevos alojamientos a la base de datos.
+   - **Editar Alojamientos**: Los detalles existentes de los alojamientos pueden ser modificados.
+   - **Eliminar Alojamientos**: Permite a los administradores remover alojamientos de la base de datos.
+   - **Operaciones CRUD sobre la información de alojamientos**: Gestiona ubicación, precios, disponibilidad, y servicios de cada alojamiento.
 
-2. **Búsqueda y Filtrado Avanzado**: Soporte para búsquedas multi-criterio que permiten a los usuarios encontrar hostales que mejor se adapten a sus necesidades.
+2. **Manejo de Reservaciones**:
+   - **Crear Reservas**: Los usuarios pueden hacer reservaciones en línea para los alojamientos disponibles.
+   - **Visualización de Reservas**: Los usuarios y administradores pueden ver todas las reservas activas y pasadas.
 
-3. **Manejo de Reservaciones**: Gestión completa de las reservaciones de los usuarios.
+3. **Gestión de Likes**:
+   - Los usuarios pueden expresar su preferencia por un alojamiento específico a través de "likes", lo cual ayuda a otros usuarios a decidir y a los administradores a entender la popularidad de los alojamientos.
 
-4. **Integración con otros Módulos**: Comunicación eficiente con otros módulos del sistema para proporcionar una experiencia de usuario coherente y fluida.
+4. **Integración con otros Módulos**:
+   - Comunicación eficiente con otros módulos del sistema para proporcionar una experiencia de usuario coherente y fluida.
 
 ### Tecnologías utilizadas
 
